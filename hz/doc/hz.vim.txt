@@ -1,0 +1,249 @@
+*hz.vim.txt*	Collected functions and commands for my vimrc
+Austin Ziegler <halostatue@gmail.com>                        *Hz.vim* *hz.vim*
+
+==============================================================================
+CONTENTS                                                     *hz.vim-contents*
+  1. Introduction........................................|hz.vim-introduction|
+  2. Configuration.............................................|hz.vim-config|
+  3. Functions..............................................|hz.vim-functions|
+  4. Compatibility......................................|hz.vim-compatibility|
+  5. Licence..................................................|hz.vim-licence|
+
+==============================================================================
+INTRODUCTION                                             *hz.vim-introduction*
+
+
+Hz.vim is a collection of functions and commands that power Austin Ziegler's
+vim configuration.
+
+==============================================================================
+CONFIGURATION                                                  *hz.vim-config*
+
+                                                                        *g:hz*
+The global default foldtext function for use with |hz#ui#smart_foldtext(()|).
+
+                                                    *b:hz#ui#default_foldtext*
+A buffer-specific default foldtext function for use with
+|hz#ui#smart_foldtext(()|).
+
+==============================================================================
+FUNCTIONS                                                   *hz.vim-functions*
+
+hz#platform()                                                  *hz#platform()*
+  Returns a string representing the underlying platform as Hz.vim understands
+  it. Will be one of `windows`, `cygwin`, `mac`, or `unix`.
+
+hz#range_uniq()                                              *hz#range_uniq()*
+  Loop over the range of text and remove duplicate lines without changing the
+  sort order. Originally by Damian Conway, presented in Scripting the Vim
+  Editor, Part 4 at IBM developerWorks.
+
+  https://www.ibm.com/developerworks/library/l-vim-script-4/index.html
+
+  Add mappings:
+
+      nmap ;u :%call hz#range_uniq()<CR>
+
+      vmap u :call hz#range_uniq()<CR>
+
+hz#valid_function({varname})                             *hz#valid_function()*
+  Report whether the function in {varname} provided exists, and if so,
+  contains a valid function name. The function name may be a bare name (`fn`)
+  or have parentheses at the end (`fn()`).
+
+hz#mkpath({path}, [force])                                       *hz#mkpath()*
+  Make {path}, prompting unless [force] is provided.
+
+hz#isotime([time])                                              *hz#isotime()*
+  Portably produce a proper ISO 8601/RFC3339 timestamp. If [time] is not
+  provided, the current time will be used.
+
+hz#try([dict], [default], {Func}, [args])                           *hz#try()*
+
+  Try to call the given [Func] with an optional dictionary, default, and
+  arguments.
+
+      hz#try('fugitive#statusline')
+  hz#try(function('fugitive#statusline'))
+
+  If [Func] is a dictionary function (and not a partial function reference),
+  it is necessary to provide the [dict] parameter to properly provide `self`.
+
+      hz#try({}, 'dict.Func')
+
+  A [default] value may be provided before the function reference, if it is
+  inside of a list.
+
+      hz#try(['default'], 'F')
+
+  Arguments are passed after the function name or reference.
+
+      hz#try(['default'], 'F', 1, 2, 3)
+
+  This function is originally by Tim Pope as part of Flagship.
+
+  [default] is '' if omitted.
+  [dict] is {} if omitted.
+  [args] is [] if omitted.
+
+hz#flatten({list...})                                           *hz#flatten()*
+  Flatten the {list...}. This version executes recursively, so be careful of
+  the type of list that you try to flatten.
+
+      [1, 2, 3] == hz#flatten([1, 2, 3])
+
+      [1, 2, 3] == hz#flatten([1, [2, 3]])
+
+      [1, 2, 3] == hz#flatten([1, [2, [3]]])
+
+hz#bufferize#do({command})                                 *hz#bufferize#do()*
+  Execute a command, capturing (appending) its output to a buffer. It works
+  with hidden buffers as well as visible buffers.
+
+  Copied from functions by Andrew Radev.
+
+hz#bufferize#bufnr({command})                           *hz#bufferize#bufnr()*
+  Return the buffer number if the buffer has a window visible on this tabpage.
+  Return a negative buffer number if the buffer is not visible.
+
+hz#cache#root()                                              *hz#cache#root()*
+  Return the cache root path.
+
+hz#cache#for({path...})                                       *hz#cache#for()*
+  Create and return a named cache for the given {path...}.
+
+hz#config#loaded([name])                                  *hz#config#loaded()*
+  If [name] is provided, reports whether a file or pattern matching [name] has
+  been loaded.
+
+  If not provided, returns a dict of all configuration files loaded through
+  hz#config functions, as well as the patterns that loaded them in the first
+  place.
+
+hz#config#name({pattern})                                   *hz#config#name()*
+  Normalizes the pattern provided to a config pattern.
+
+    * hz#config#name('init') -> 'config/init.vim'
+    * hz#config#name('config/init') -> 'config/init.vim'
+    * hz#config#name('plug/*') -> 'config/plug/*.vim'
+    * hz#config#name('/etc/init.vim') -> '/etc/init.vim'
+
+hz#config#exists([from], {pattern})                       *hz#config#exists()*
+  Returns v:true if {pattern} can be found in [from], which is 'runtimepath'
+  by default.
+
+  [from] is 'runtimepath' if omitted.
+
+hz#config#runtime({pattern...})                          *hz#config#runtime()*
+  Source the file or files expressed by {pattern...} from 'runtimepath'. This
+  is similar to the the |:source| command.
+
+  Multiple patterns may be provided either as multiple arguments or one or
+  more lists of patterns.
+
+hz#config#source({pattern...})                            *hz#config#source()*
+  Source the file or files expressed by {pattern...} as config names (see
+  |hz#config#name()| from 'runtimepath'.
+
+  Multiple patterns may be provided either as multiple arguments or one or
+  more lists of patterns.
+
+  If one or more files has been loaded, one or more keys will be set to
+  `v:true`. The following two examples mean the same thing:
+
+      hz#config#source('editing', 'viewing')
+
+      hz#config#source(['editing', 'viewing'])
+
+hz#config#platform()                                    *hz#config#platform()*
+  Sources config files that match the platform has returned from
+  |hz#platform()|.
+
+hz#config#ui()                                                *hz#config#ui()*
+  If the GUI is running (`has('gui_running')`), sources a `gui` config file.
+  If not, it sources a `terminal` config file.
+
+hz#is#mac()                                                      *hz#is#mac()*
+  Returns v:true if the platform is a Mac
+
+hz#is#macgui()                                                *hz#is#macgui()*
+  Returns v:true if the platform is a Mac running the MacVim GUI
+
+hz#is#windows()                                              *hz#is#windows()*
+  Returns v:true if the platform is Windows
+
+hz#is#cygwin()                                                *hz#is#cygwin()*
+  Returns v:true if the platform is Cygwin
+
+hz#is#sudo()                                                    *hz#is#sudo()*
+  Returns v:true if the platform is running under `sudo`.
+
+hz#is#plugged({plug})                                        *hz#is#plugged()*
+  Returns v:true if the {plug} has been added to the vim-plug configuration.
+
+  This is used to provide conditional configuration options, such as disabling
+  `netrw` if `NERDTree` is installed).
+
+      Plug 'scrooloose/nerdtree'
+
+      ...
+
+      if hz#is#plugged('nerdtree')       let g:loaded_netrwPlugin = 1
+  endif
+
+hz#toggle#option({option})                                *hz#toggle#option()*
+  Toggle an {option} with `setlocal`.
+
+hz#toggle#variable({variable})                          *hz#toggle#variable()*
+  Toggle an option flag {variable}.
+
+hz#ui#tabline()                                              *hz#ui#tabline()*
+  Create a cleaner tabline.
+
+      let &tabline = '%!hz#ui#tabline()'
+
+hz#ui#foldtext()                                            *hz#ui#foldtext()*
+  A cleaner foldtext function.
+
+      set foldtext='hz#ui#foldtext()'
+
+hz#ui#smart_foldtext([foldtext])                      *hz#ui#smart_foldtext()*
+  Sets the local 'foldtext' function to either a provided [foldtext] function.
+
+  Without a [foldtext] function provided, a local 'foldtext' value of
+  `getline(v:foldstart)` will be replaced with of |b:hz#ui#default_foldtext|,
+  |g:hz#ui#default_foldtext|, or |foldtext()|.
+
+hz#ui#status#buffer()                                  *hz#ui#status#buffer()*
+  Returns the buffer as `[n/N]`. Suitable for use in setting a status line.
+
+hz#ui#status#preview()                                *hz#ui#status#preview()*
+  Returns `[preview]` if the window is marked as a preview window.
+
+hz#ui#status#filemodifiers()                    *hz#ui#status#filemodifiers()*
+  Returns status line file modifiers.
+
+hz#ui#status#fugitive()                              *hz#ui#status#fugitive()*
+  Returns the status information from fugitive.
+
+==============================================================================
+COMPATIBILITY                                           *hz.vim-compatibility*
+
+
+All of the functions in Hz.vim are known to work with MacVim 8.1. Most of them
+will work on older Vim versions, other platforms, or NeoVim, but compatibility
+is not guaranteed.
+
+==============================================================================
+LICENCE                                                       *hz.vim-licence*
+
+
+Hz.vim is public domain where possible, or licensed under CC0 1.0 where not.
+There are no warranties, implied or expressed, about this Hz.vim or its
+suitability or fitness for any particular purpose.
+
+See https://creativecommons.org/publicdomain/zero/1.0/legalcode for more
+information.
+
+
+vim:tw=78:ts=8:ft=help:norl:

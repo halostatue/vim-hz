@@ -1,0 +1,6 @@
+{
+  "name": "hz.vim",
+  "description": "Collected functions and commands for my vimrc",
+  "author": "Austin Ziegler <halostatue@gmail.com>",
+  "version": 2.0
+}
