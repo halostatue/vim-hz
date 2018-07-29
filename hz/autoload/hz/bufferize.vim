@@ -58,3 +58,19 @@ function! hz#bufferize#bufnr(command) abort
 
   return -1 * l:bufnr
 endfunction
+
+function! s:update_messages_buffer(...) abort
+  silent call hz#bufferize#do('messages')
+end
+
+""
+" Bufferizes the messages command with an update callback. If messages are
+" already bufferized, does nothing.
+function! hz#bufferize#messages() abort
+  if hz#bufferize#bufnr('messages') | return | endif
+
+  call s:update_message_buffer()
+
+  call hz#buffer#timer(hz#bufferize#bufnr('messages'),
+        \ function('s:update_messages_buffer'), 500)
+endfunction

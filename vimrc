@@ -14,8 +14,8 @@ scriptencoding utf-8
 " There is no warranty on these scripts or promise that they will even work for
 " you.
 
-let g:hz_vimrc_version = '2.0'
-lockvar g:hz_vimrc_version
+let g:hz_vim_vim_version = '2.0'
+lockvar g:hz_vim_vim_version
 
 " Skip initialization for a vim-tiny or vim-small environment.
 if 0 | finish | endif
@@ -23,7 +23,8 @@ if 0 | finish | endif
 " Use vim settings. First because it changes other options as a side-effect.
 if has('vim_starting') | set nocompatible | endif
 
-let &runtimepath = &runtimepath . ',' . fnamemodify('<sfile>', ':p:h') . '/hz'
+let g:hz_vim_root_path = fnamemodify('<sfile>', ':p:h')
+let &runtimepath = &runtimepath . printf(',%s/hz', g:hz_vim_root_path)
 
 call hz#config#source('init')
 

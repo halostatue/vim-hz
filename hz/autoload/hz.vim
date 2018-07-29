@@ -41,34 +41,6 @@ function! hz#platform() abort
 endfunction
 
 ""
-" Loop over the range of text and remove duplicate lines without changing the
-" sort order. Originally by Damian Conway, presented in Scripting the Vim
-" Editor, Part 4 at IBM developerWorks.
-"
-" https://www.ibm.com/developerworks/library/l-vim-script-4/index.html
-"
-" Add mappings:
-"
-"     nmap ;u :%call hz#range_uniq()<CR>
-"
-"     vmap u :call hz#range_uniq()<CR>
-function! hz#range_uniq() range abort
-  let l:seen = {}
-  let l:uniq = [
-
-  for l:line in getline(a:firstline, a:lastline)
-    let l:normalized = '>' . l:line
-    if !has_key(l:seen, l:normalized)
-      call add(l:uniq, l:line)
-      let l:seen[l:normalized] = 1
-    endif
-  endfor
-
-  execute a:firstline . ',' . a:lastline . 'delete'
-  call append(a:firstline - 1, l:uniq)
-endfunction
-
-""
 " Report whether the function in {varname} provided exists, and if so,
 " contains a valid function name. The function name may be a bare name (`fn`)
 " or have parentheses at the end (`fn()`).
@@ -79,9 +51,8 @@ endfunction
 ""
 " Make {path}, prompting unless [force] is provided.
 function! hz#mkpath(path, ...) abort
-  let l:force = (a:0 && a:1)
   if !isdirectory(a:path) && &l:buftype ==# '' &&
-        \ (l:force ||
+        \ ((a:0 && a:1) ||
         \  input(printf('"%s" does not exist; create? [y/N]', a:path)) =~? '^y')
     call mkdir(iconv(a:path, &encoding, &termencoding), 'p')
   endif
@@ -152,7 +123,7 @@ function! hz#try(...) abort
 endfunction
 
 ""
-" Flatten the {list...}. This version executes recursively, so be careful of the
+" Flatten the {list}. This version executes recursively, so be careful of the
 " type of list that you try to flatten.
 "
 "     [1, 2, 3] == hz#flatten([1, 2, 3])
@@ -174,6 +145,10 @@ function! hz#flatten(list) abort
   return l:list
 endfunction
 
+""
+" Flattens {list...}, extending each onto the other. This uses
+" @function(hz#flatten) to flatten each list received, so it is also
+" recursive.
 function! hz#flatextend(...) abort
   let l:list = []
 
@@ -187,6 +162,129 @@ function! hz#flatextend(...) abort
 
   return l:list
 endfunction
+
+""
+" Answers if {needle} can be found in the provided {haystack} which may be a
+" string, list, or dictionary (where is searches the values).
+"
+" If {haystack} is a string, but {needle} is not, returns false.
+" If {haystack} is neither a string, list, nor dictionary, returns false.
+function! hz#in(haystack, needle) abort
+  if type(a:haystack) == v:t_string
+    return type(a:needle) == v:t_string && strdix(a:haystack, a:needle) != -1
+  elseif type(a:haystack) == v:t_list
+    return index(a:haystack, a:needle) != -1
+  elseif type(a:haystack) == v:t_dict
+    return index(values(a:haystack), a:needle) != -1
+  endif
+
+  return v:false
+endfunction
+
+""
+" Trims leading [pattern] from {string}.
+"
+" @default pattern='\_s' The regex for whitespace and newlines.
+function! hz#trim_leading(string, ...) abort
+  return substitute(a:string, printf('^%s\+', a:0 ? a:1 : '\_s'), '', '')
+endfunction
+
+""
+" Trims trailing [pattern] from {string}.
+"
+" @default pattern='\_s' The regex for whitespace and newlines.
+function! hz#trim_trailing(string, ...) abort
+  let l:pattern = '\_s\+$'
+  if a:0 == 1 | let l:pattern = a:1 . '\+$' | endif
+  return substitute(a:s, printf('%s\+$', a:0 ? a:1 : '\_s'), '', '')
+endfunction
+
+""
+" Trims both leading and trailing [pattern] from {string}.
+"
+" @default pattern='\_s' The regex for whitespace and newlines.
+function! hz#trim(string, ...) abort
+  let l:pattern = a:0 ? a:1 : '\_s'
+  return hz#trim_trailing(hz#trim_leading(a:string, l:pattern), l:pattern)
+endfunction
+
+""
+" Executes {command} while saving and restoring the window state.
+function! hz#in_place(command) abort
+  let l:saved_view = winsaveview()
+  execute a:command
+  let winrestview(l:saved_view)
+endfunction
+
+""
+" Executes {command} while saving and restoring the most recent saved search
+" history and the window state.
+function! hz#with_saved_search(command) abort
+  let l:ch = histnr('search')
+  call hz#in_place(a:command)
+  while l:ch != histnr('search') | call histdel('search', -1) | endwhile
+  let @/ = histget('search', -1)
+endfunction
+
+""
+" Clean trailing whitespace from the range.
+function! hz#clean_whitespace() abort range
+  call hz#with_saved_search(a:firstline . ',' a:lastline . 's/\s\+$//e')
+endfunction
+
+""
+" Gets the value of {setting}, checking for a buffer override then a global
+" value. That is, {setting} will be pulled from |b:|, then |g:|. A [default]
+" value may be provided.
+function! hz#get_setting(setting, ...) abort
+  return get(b:, a:setting, get(g:, a:setting, get(a:000, 0, '')))
+endfunction
+
+""
+" Execute the normal mode {motion} and return the text that it marks. For this
+" to work, the {motion} must include a visual mode key (`V`, `v`, or `gv`).
+"
+" Both the 'z' register and the original cursor position will be restored
+" after the text is yanked.
+function! hz#get_motion(motion) abort
+  let l:cursor = getpos('.')
+  let l:reg = getreg('z')
+  let l:type = getregtype('z')
+
+  execute 'normal!' a:motion . '"zy'
+
+  let l:text = @z
+
+  call setreg('z', l:reg, l:type)
+  call setpos('.', l:cursor)
+
+  return l:text
+end
+
+""
+" Run the normal mode {command} from line {start} to {end}, opening any folds.
+"
+function! hz#mark_visual(command, start, end) abort
+  if a:start != line('.') | execute a:start | endif
+
+  silent! execute printf('%d,%dfoldopen', a:start, a:end)
+
+  if a:end > a:start
+    execute 'normal!' a:command . (a:end - a:start) . 'jg_'
+  else
+    execute 'normal!' a:command . 'g_'
+  endif
+endfunction
+
+""
+" Programmatically jump to the window identified by {bufname}.
+function! hz#switch_window(bufname) abort
+  let l:nr = bufwinnr(a:bufname)
+  if l:nr >= 0 | execute l:nr . 'wincmd w' | endif
+endfunction
+
+""
+"
 
 " function! hs#reset_on_filetype() abort
 "   " Disable automatically insert comment.
