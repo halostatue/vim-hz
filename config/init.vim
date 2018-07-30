@@ -2,10 +2,11 @@
 
 if exists('+shellslash') | set shellslash | endif
 
-" Do not ring the bell for error messages (`noerrorbells`), turn on visual bell
-" (`visualbell`), then turn it off (`t_vb=`). Note that when the GUI starts,
-" `t_vb` gets reset to `<Esc>|f`, so it may need to be reset in the `gvimrc`.
-set noerrorbells visualbell t_vb=
+" Do not ring the bell for error messages (`noerrorbells`), turn on visual
+" bell (`visualbell`), but really turn it off (`t_vb=`). Note that when the
+" GUI starts, `t_vb` gets reset to `<Esc>|f`, so config/autocmd.vim has an
+" autogroup that does this when the GUI is entered.
+set noerrorbells novisualbell t_vb=
 
 " Prevent several default plug-ins from being loaded, because we don't want
 " them.

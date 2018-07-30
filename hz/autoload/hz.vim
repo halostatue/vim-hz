@@ -213,7 +213,7 @@ endfunction
 function! hz#in_place(command) abort
   let l:saved_view = winsaveview()
   execute a:command
-  let winrestview(l:saved_view)
+  call winrestview(l:saved_view)
 endfunction
 
 ""
@@ -259,7 +259,7 @@ function! hz#get_motion(motion) abort
   call setpos('.', l:cursor)
 
   return l:text
-end
+endfunction
 
 ""
 " Run the normal mode {command} from line {start} to {end}, opening any folds.
@@ -282,38 +282,3 @@ function! hz#switch_window(bufname) abort
   let l:nr = bufwinnr(a:bufname)
   if l:nr >= 0 | execute l:nr . 'wincmd w' | endif
 endfunction
-
-""
-"
-
-" function! hs#reset_on_filetype() abort
-"   " Disable automatically insert comment.
-"   setlocal formatoptions-=ro formatoptions+=mMBl
-"
-"   " Disable auto wrap.
-"   if &l:textwidth != 70 && &filetype !=# 'help'
-"     setlocal textwidth=0
-"   endif
-"
-"   if &filetype !=# 'help'
-"     call hs#smart_foldtext()
-"   endif
-"
-"   if !&l:modifiable
-"     setlocal nofoldenable
-"     setlocal foldcolumn=0
-"
-"     if v:version >= 703
-"       setlocal colorcolumn=
-"     endif
-"   endif
-" endfunction
-"
-" function! hs#init_cmdwin() abort
-"   nnoremap <buffer><silent> q :<C-u>quit<Return>
-"   nnoremap <buffer><silent> <Tab> :<c-u>quit<Return>
-"
-"   call cursor(line('$'), 0)
-"
-"   startinsert!
-" endfunction

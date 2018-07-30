@@ -9,10 +9,16 @@ let s:config.modifiers =
       \   'unmodifiable' : '-',
       \   'readonly' : '🚫',
       \   'quickfix' : '',
+      \   'preview' : '[preview]',
       \ }
 
+function! s:append_space(text)
+  return a:text . (empty(a:text) ? '' : ' ')
+endfunction
+
 ""
-" Returns the buffer as `[n/N]`. Suitable for use in setting a status line.
+" Returns the buffer number as `[n/N]`. Suitable for use in setting a status
+" line.
 function! hz#ui#status#buffer() abort
   return printf('[%d/%d]', bufnr('%'), bufnr('$'))
 endfunction
@@ -20,7 +26,7 @@ endfunction
 ""
 " Returns `[preview]` if the window is marked as a preview window.
 function! hz#ui#status#preview() abort
-  return &previewwindow ? '[preview]' : ''
+  return &previewwindow ? s:config.modifiers.preview : ''
 endfunction
 
 ""
@@ -42,23 +48,26 @@ function! hz#ui#status#filemodifiers() abort
 
   let l:result = join([l:state, l:filetype], '')
 
-  if !empty(l:result) | let l:result .= ' ' | endif
-
-  return l:result
+  return s:append_space(l:result)
 endfunction
 
 ""
-" Returns the status information from fugitive.
-function! hz#ui#status#fugitive() abort
-  let l:result = hz#try('fugitive#statusline')
-  if !empty(l:result) | let l:result .= ' ' | end
-  return l:result
+" Returns the SCM status (currently only supports fugitive).
+function! hz#ui#status#scm() abort
+  return s:append_space(hz#try('fugitive#statusline'))
+endfunction
+
+""
+" Returns search count information (currently only supports anzu).
+function! hz#ui#status#search() abort
+  return s:append_space(hz#try('anzu#search_status()'))
 endfunction
 
 ""
 " Returns the current asynchronous run status.
 function! hz#ui#status#asyncrun() abort
-  return get(g:, 'asyncrun_status', '')
+  let l:out = get(g:, 'asyncrun_status', '')
+  return l:out . (l:out ? ' ' : '')
 endfunction
 
 function! s:block(input, type, value)
@@ -88,8 +97,10 @@ lockvar s:hs_status_syntax_ale
 ""
 " Returns a status line value for either syntastic or ale.
 function! hz#ui#status#syntax() abort
+  let l:out = ''
+
   if hz#is#plugged('syntastic')
-    return hz#try('SyntasticStatuslineFlag')
+    let l:out = hz#try('SyntasticStatuslineFlag')
   elseif hz#is#plugged('ale')
     let l:b = bufnr('')
     let l:ale = ale#statusline#Count(l:b)
@@ -131,9 +142,8 @@ function! hz#ui#status#syntax() abort
             \ '\v\C\%(-?\d*%(\.\d+)?)([tewiEWlc%])',
             \ '\=lib#wformat(submatch(1), flags[submatch(2)])',
             \ 'g')
-      return l:out
     endif
   endif
 
-  return ''
+  return s:append_space(l:out)
 endfunction

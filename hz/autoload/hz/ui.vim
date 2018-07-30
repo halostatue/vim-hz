@@ -4,7 +4,7 @@ scriptencoding utf-8
 " Create a cleaner tabline.
 "
 "     let &tabline = '%!hz#ui#tabline()'
-function! hz#ui#tabline(...) abort
+function! hz#ui#tabline() abort
   let l:s = []
 
   for l:i in range(1, tabpagenr('$'))
