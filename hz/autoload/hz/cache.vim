@@ -16,7 +16,7 @@ else
 endif
 
 function! s:mkcachepath(...)
-  let l:path = join(hz#flatten([s:vim_cache, a:000]), '/')
+  let l:path = join(hz#fn#flatten(s:vim_cache, a:000), '/')
   if !isdirectory(l:path) | call mkdir(l:path, 'p') | endif
   return l:path
 endfunction

@@ -21,17 +21,17 @@ let g:loaded_vimballPlugin = 1 " Disable vimballs.
 if has('vim_starting') && !hz#config#exists('autoload/plug.vim')
   echo "Installing vim-plug.\n"
   execute join([
-          \   'silent !curl -fLo',
-	  \   expand('<sfile>:p:h:h') . '/autoload/plug.vim',
-          \   '--create-dirs',
-          \   'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-          \ ])
+        \   'silent !curl -fLo',
+        \   expand('<sfile>:p:h:h') . '/autoload/plug.vim',
+        \   '--create-dirs',
+        \   'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+        \ ])
   augroup vim-plug-install
     autocmd!
     autocmd VimEnter *
-	  \  if exists(':PlugInstall') == 2
-	  \|   PlugInstall --sync | source $MYVIMRC
-    	  \| endif
+          \  if exists(':PlugInstall') == 2
+          \|   PlugInstall --sync | source $MYVIMRC
+          \| endif
   augroup END
 else
   augroup vim-plug-install

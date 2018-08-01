@@ -6,7 +6,7 @@ scriptencoding utf-8
 "
 " @default interval=500 ms
 function! hz#buffer#timer(bufnr, callback, ...)
-  if !has('+timers') | throw "Timers are not enabled." | endif
+  if !has('timers') | throw "Timers are not enabled." | endif
 
   let l:timer = timer_start(a:0 ? a:1 : 500, a:callback, { 'repeat': -1 })
 

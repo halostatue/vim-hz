@@ -80,15 +80,19 @@ function! s:startup()
     return
   endif
 
+  if argc() != 0 && !isdirectory(argv()[0])
+    return
+  endif
+
   if exists(':Startify')
     Startify
   endif
 
   if exists(':NERDTree')
-    if argc() == 1 && isdirectory(argv()[0])
+    if argc() != 0 && isdirectory(argv()[0])
       execute 'NERDtree' argv()[0]
     else
-      execute NERDTree
+      NERDTree
     endif
     wincmd w
   endif

@@ -45,7 +45,7 @@ endfunction
 " A cleaner foldtext function.
 "
 "     set foldtext='hz#ui#foldtext()'
-function hz#ui#foldtext() abort
+function! hz#ui#foldtext() abort
   let l:line = getline(v:foldstart)
 
   let l:nucolwidth = &foldcolumn + &number * &numberwidth
@@ -96,5 +96,84 @@ function! hz#ui#smart_foldtext(...) abort
     endif
 
     let &l:foldtext = l:ftf
+  endif
+endfunction
+
+""
+" @setting g:hzvim_guifont
+" The value of guifont. Defaults to Fira Code, Input Mono Narrow, Source Code
+" Pro, Inconsolata Medium, Anonymous Pro, DejaVu Sans Mono, and Andale Mono.
+
+""
+" @setting g:hzvim_guifont_size
+" The pointsize of values in @setting(g:hzvim_guifont) when the point size is
+" not provided. The default is 10 points.
+
+let s:hzvim_guifont_default =
+      \ [
+      \   'Fira Code',
+      \   'Input Mono Narrow',
+      \   'Source Code Pro',
+      \   'Inconsolata Medium',
+      \   'Anonymous Pro',
+      \   'DejaVu Sans Mono',
+      \   'Andale Mono',
+      \ ]
+
+""
+" @usage [dict]
+" @usage [list]
+" @usage [font...]
+"
+" Set 'guifont' either from the default @setting(g:hzvim_guifont) or from the
+" provided dictionary (`{ 'font' : points }`) or list (each item is either
+" `['font', points]`, `['font']`, or `'font'`). If the point size is not
+" provided, it is set to @setting(g:hzvim_guifont_size).
+function! hz#ui#set_guifont(...) abort
+  if a:0 > 1
+    let l:list = deepcopy(a:000)
+  elseif a:0 == 1
+    let l:list = a:1
+  else
+    let l:list = get(g:, 'hzvim_guifont', s:hzvim_guifont_default)
+  endif
+
+  if type(l:list) == v:t_dict
+    let l:list = map(l:list, { k, v -> [ k, v ] })
+  endif
+
+  if type(l:list) != v:t_list | let l:list = [ l:list ] | endif
+
+  let l:size = get(g:, 'hzvim_guifont_size', 10)
+  let l:list = map(l:list, { _, v -> s:ensure_font_size(v, l:size) })
+  let l:list = s:guifont_join(l:list)
+  let &guifont = l:list
+
+  return l:list
+endfunction
+
+function! s:ensure_font_size(item, size)
+  if type(a:item) == v:t_string
+    return [ a:item, a:size ]
+  elseif type(a:item) == v:t_list
+    if len(a:item) == 1
+      return [ a:item[0], a:size ]
+    elseif len(a:item) == 2
+      return a:item
+    else
+      throw printf('Invalid type (%d) for font spec, too many parts: %s',
+            \ type(a:item), string(a:item))
+    endif
+  else
+    throw printf('Invalid type (%d) for font spec: %s', type(a:item),
+          \ string(a:item))
+  endif
+endfunction
+
+function! s:guifont_join(list)
+  if hz#is#mac() || hz#is#windows()
+    return join(map(a:list, { _, v -> join(v, ':h') }), ',')
+  else
+    return join(map(a:list, { _, v -> join(v, ' ') }), ',')
   endif
 endfunction

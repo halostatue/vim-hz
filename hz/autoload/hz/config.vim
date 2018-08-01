@@ -9,7 +9,7 @@ let s:loaded = {}
 
 function! s:loaded(from, ...)
   let l:found = v:false
-  for l:pattern in hz#flatten(a:000)
+  for l:pattern in hz#fn#flatten(a:000)
     for l:vim in globpath(a:from, l:pattern, 0, 1)
       if !get(s:loaded, l:vim)
         execute 'source' fnameescape(l:vim)
@@ -86,7 +86,7 @@ endfunction
 " Multiple patterns may be provided either as multiple arguments or one or
 " more lists of patterns.
 function! hz#config#runtime(pattern, ...) abort
-  return s:loaded(&runtimepath, hz#flatextend(a:pattern, a:000))
+  return s:loaded(&runtimepath, hz#fn#flatten(a:pattern, a:000))
 endfunction
 
 ""
@@ -105,7 +105,7 @@ endfunction
 function! hz#config#source(pattern, ...) abort
   let l:found = v:false
 
-  for l:pattern in hz#flatextend(a:pattern, a:000)
+  for l:pattern in hz#fn#flatten(a:pattern, a:000)
     let l:config = hz#config#name(l:pattern)
     if hz#config#runtime(l:config)
       let s:loaded[l:config] = v:true
@@ -129,8 +129,8 @@ endfunction
 " If not, it sources a `terminal` config file.
 function! hz#config#ui() abort
   if has('gui_running')
-    return hz#config#source('gui')
+    return hz#config#source('gui', 'gui/' . hz#platform())
   else
-    return hz#config#source('terminal')
+    return hz#config#source('terminal', 'terminal/' . hz#platform())
   endif
 endfunction

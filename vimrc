@@ -12,38 +12,42 @@ scriptencoding utf-8
 let g:hz_vim_vim_version = '2.0'
 lockvar g:hz_vim_vim_version
 
-unlet! g:skip_defaults_vim
-source $VIMRUNTIME/defaults.vim
-
 " Skip initialization for a vim-tiny or vim-small environment.
 if 0 | finish | endif
 
 " Use vim settings. First because it changes other options as a side-effect.
 if has('vim_starting') | set nocompatible | endif
 
-let g:hz_vim_root_path = fnamemodify('<sfile>', ':p:h')
+" New to Vim 8, a defaults similar to Tim Pope's sensible. Use it before
+" anything else.
+unlet! g:skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
+
+if isdirectory(expand('$HOME/.vim'))
+  let g:hz_vim_root_path = expand('$HOME/.vim')
+elseif isdirectory(expand('$HOME/vimfiles'))
+  let g:hz_vim_root_path = expand('$HOME/vimfiles')
+end
 let &runtimepath = &runtimepath . printf(',%s/hz', g:hz_vim_root_path)
 
-call hz#config#source('init')
-
-call plug#begin(hz#cache#for('vim/plug'))
-      \| call hz#config#source('plugs')
-      \| call plug#end()
-
 call hz#config#source([
-        \ 'editing',
-        \ 'viewing',
-        \ 'autocmd',
-        \ 'filetype',
-        \ 'plugin-settings',
-        \ 'syntax-settings',
-        \ 'commands',
-        \ 'abbreviations',
-        \ 'key-mappings',
-        \ 'plugs/*',
-        \ ])
+      \ 'init',
+      \ 'plugs',
+      \ 'abbreviations',
+      \ 'autocmd',
+      \ 'commands',
+      \ 'editing',
+      \ 'filetype',
+      \ 'keys',
+      \ 'syntax',
+      \ 'viewing',
+      \ 'plug-ins/*',
+      \ ])
 
 call hz#config#platform()
 call hz#config#ui()
+
+call hz#config#source('local/*')
+call hz#config#source('style')
 
 set secure

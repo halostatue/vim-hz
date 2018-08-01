@@ -25,14 +25,14 @@ if has('folding')
 end
 
 " Prefer ripgrep, pt or ag over grep for :grep.
-" if executable('rg')
-"   let &grepprg='rg --color never --no-heading'
-if executable('pt')
-  let &grepprg='pt --nogroup --nocolor'
+if executable('rg')
+  let &grepprg='rg --line-number --color never --no-heading $*'
+elseif executable('pt')
+  let &grepprg='pt --nogroup --nocolor $*'
 elseif executable('ag')
-  let &grepprg='ag --nogroup --nocolor'
+  let &grepprg='ag --nogroup --nocolor $*'
 else
-  let &grepprg='grep -inH'
+  let &grepprg='grep -inH $*'
 endif
 
 set timeout timeoutlen=600 " Keymapping timeout.
@@ -87,3 +87,4 @@ if has('syntax')
 endif
 
 call hz#ui#smart_foldtext()
+call hz#toggle#gjk_mapping(1) " Use the alternate mapping for j (gj).

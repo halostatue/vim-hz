@@ -2,10 +2,6 @@ scriptencoding utf-8
 
 if has('smartindent') | set smartindent | endif
 
-" These values have been determined more by trawling through the syntax files
-" than reading the documentation. There's more features that exist than are
-" documented. Only the ones that I have an interest in are included here.
-
 let g:c_ansi_constants = 1
 let g:c_ansi_typedefs = 1
 let g:c_comment_strings = 1
@@ -128,7 +124,7 @@ augroup END
 
 function! s:omni(fn)
   if exists(printf('*%s', a:fn)) | let &l:omnifunc=a:fn | endif
-endif
+endfunction
 
 augroup hzvim_autocmd_filetype_omnicompletes
   autocmd!

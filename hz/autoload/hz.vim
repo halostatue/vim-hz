@@ -123,47 +123,6 @@ function! hz#try(...) abort
 endfunction
 
 ""
-" Flatten the {list}. This version executes recursively, so be careful of the
-" type of list that you try to flatten.
-"
-"     [1, 2, 3] == hz#flatten([1, 2, 3])
-"
-"     [1, 2, 3] == hz#flatten([1, [2, 3]])
-"
-"     [1, 2, 3] == hz#flatten([1, [2, [3]]])
-function! hz#flatten(list) abort
-  let l:list = []
-
-  for l:item in a:list
-    if type(l:item) == v:t_list
-      call extend(l:list, hz#flatten(l:item))
-    else
-      call add(l:list, l:item)
-    endif
-  endfor
-
-  return l:list
-endfunction
-
-""
-" Flattens {list...}, extending each onto the other. This uses
-" @function(hz#flatten) to flatten each list received, so it is also
-" recursive.
-function! hz#flatextend(...) abort
-  let l:list = []
-
-  for l:item in a:000
-    if type(l:item) == v:t_list
-      call extend(l:list, hz#flatten(l:item))
-    else
-      call add(l:list, l:item)
-    endif
-  endfor
-
-  return l:list
-endfunction
-
-""
 " Answers if {needle} can be found in the provided {haystack} which may be a
 " string, list, or dictionary (where is searches the values).
 "

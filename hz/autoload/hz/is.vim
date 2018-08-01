@@ -49,7 +49,9 @@ function! hz#is#sudo() abort
 endfunction
 
 ""
-" Returns v:true if the {plug} has been added to the vim-plug configuration.
+" @usage {plug} [plugs..]
+" Returns v:true if {plug} (or [plugs...]) has been added to the vim-plug
+" configuration.
 "
 " This is used to provide conditional configuration options, such as disabling
 " `netrw` if `NERDTree` is installed).
@@ -60,7 +62,8 @@ endfunction
 "
 "     if hz#is#plugged('nerdtree')
 "       let g:loaded_netrwPlugin = 1
+"       ...
 "     endif
-function! hz#is#plugged(plug) abort
+function! hz#is#plugged(plug, ...) abort
   return has_key(get(g:, 'plugs', {}), a:plug)
 endfunction
