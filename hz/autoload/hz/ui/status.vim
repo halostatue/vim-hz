@@ -40,15 +40,10 @@ function! hz#ui#status#filemodifiers() abort
   if !&modifiable | let l:state += [s:config.modifiers.unmodifiable] | endif
   if &readonly | let l:state += [s:config.modifiers.readonly] | endif
 
-  let l:state = ''
-  if !empty(l:state) | let l:state = '[' . join(l:state, '') . ']' | endif
+  let l:state = empty(l:state) ? '' : printf('[%s]',  join(l:state, ''))
+  let l:filetype = &filetype ==# '' ? '' : printf('[%s]', &filetype)
 
-  let l:filetype = ''
-  if &filetype !=# '' | let l:filetype = '[' . &filetype . ']' | endif
-
-  let l:result = join([l:state, l:filetype], '')
-
-  return s:append_space(l:result)
+  return s:append_space(join([l:state, l:filetype], ''))
 endfunction
 
 ""
@@ -90,6 +85,7 @@ endfunction
 " - z : both error : ale.error && ale.style_error
 " - Z : both warning : ale.warning && ale.style_warning
 " - t : total / any : ale.total
+unlockvar s:hs_status_syntax_ale
 let s:hs_status_syntax_ale =
       \ '[%q{Err }%e{%e}%z{+}%E{%E}%A{, }%Q{Warn }%w{%w}%Z{+}%W{%W}%t{ %l:%c}]'
 lockvar s:hs_status_syntax_ale
