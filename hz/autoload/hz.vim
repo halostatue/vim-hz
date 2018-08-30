@@ -45,7 +45,7 @@ endfunction
 " contains a valid function name. The function name may be a bare name (`fn`)
 " or have parentheses at the end (`fn()`).
 function! hz#valid_function(varname) abort
-  return exists(a:varname) && exists('*' . substitute(eval(a:varname), '()$', ''))
+  return exists(a:varname) && exists('*' . substitute(eval(a:varname), '()$', '', ''))
 endfunction
 
 ""

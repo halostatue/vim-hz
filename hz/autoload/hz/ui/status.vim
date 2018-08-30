@@ -53,9 +53,21 @@ function! hz#ui#status#scm() abort
 endfunction
 
 ""
+" Returns the conflicted status.
+function! hz#ui#status#conflicted() abort
+  return s:append_space(hz#try('ConflictedVersion'))
+endfunction
+
+""
 " Returns search count information (currently only supports anzu).
 function! hz#ui#status#search() abort
-  return s:append_space(hz#try('anzu#search_status()'))
+  return s:append_space(hz#try('anzu#search_status'))
+endfunction
+
+""
+" Returns CapsLockStatusline.
+function! hz#ui#status#capslock() abort
+  return s:append_space(hz#try('CapsLockStatusline'))
 endfunction
 
 ""

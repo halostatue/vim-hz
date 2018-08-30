@@ -68,3 +68,9 @@ function! hz#is#plugged(plug, ...) abort
   if empty(l:plugs) | return false | endif
   return hz#fn#any(hz#fn#flatten(a:plug, a:000), { v -> has_key(l:plugs, v) })
 endfunction
+
+function! hz#is#all_plugged(plug, ...) abort
+  let l:plugs = get(g:, 'plugs', [])
+  if empty(l:plugs) | return false | endif
+  return hz#fn#all(hz#fn#flatten(a:plug, a:000), { v -> has_key(l:plugs, v) })
+endfunction

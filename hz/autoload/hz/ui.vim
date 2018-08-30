@@ -87,12 +87,12 @@ function! hz#ui#smart_foldtext(...) abort
 
     if l:ftf !~# 'getline(v:foldstart)' | return | endif
 
-    if hs#valid_function('b:hz#ui#default_foldtext')
+    if hz#valid_function('b:hz#ui#default_foldtext')
       let l:ftf = b:hz#ui#default_foldtext . '()'
-    elseif hs#valid_function('g:hz#ui#default_foldtext')
+    elseif hz#valid_function('g:hz#ui#default_foldtext')
       let l:ftf = g:hz#ui#default_foldtext . '()'
     else
-      l:ftf = 'foldtext()'
+      let l:ftf = 'foldtext()'
     endif
 
     let &l:foldtext = l:ftf

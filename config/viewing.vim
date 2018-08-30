@@ -56,6 +56,8 @@ let &g:statusline =
       \. '%#errorMsg#%{hz#ui#status#syntax()}%*'
       \. '%{hz#ui#status#asyncrun()}'
       \. '%{hz#ui#status#search()}'
+      \. '%{hz#ui#status#conflicted()}'
+      \. '%{hz#ui#status#capslock()}'
       \. '%='
       \. '%-14.(%c%V,%l/%L%) %P'
 

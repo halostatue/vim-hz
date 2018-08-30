@@ -38,7 +38,7 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-slash'
 Plug 'junegunn/vim-pseudocl'
-      \| Plug 'junegunn/vim-fnr'
+Plug 'junegunn/vim-fnr'
 " }}}2
 " {{{2 by kana - Kana Natsuno
 Plug 'kana/vim-smartchr'
@@ -61,37 +61,44 @@ Plug 'tomtom/tinykeymap_vim'
 " {{{2 by vim-jp
 Plug 'vim-jp/autofmt'
 " }}}2
+" {{{2 by romainl - Romain Lafourcade
+Plug 'romainl/vim-qf'
+Plug 'romainl/vim-qlist'
+" }}}
+" {{{2 by mhinz - Marco Hinz
+" }}}2
 Plug 'editorconfig/editorconfig-vim'
 Plug 'direnv/direnv.vim'
 Plug 'chrisbra/unicode.vim'
 Plug 'vim-utils/vim-troll-stopper'
 Plug 'unblevable/quick-scope'
+" }}}1
 
-" {{{2 Project-related tools
-" {{{3 Fuzzy Finders
+" {{{1 Project-related tools
+" {{{2 Fuzzy Finders
 " Plug 'vim-ctrlspace/vim-ctrlspace'
 " Plug 'ctrlp/ctrlp.vim'
-" {{{4 fzf
+" {{{3 fzf
 if homebrew#isdirectory('opt/fzf')
   let &runtimepath .= ',' . homebrew#path('opt/fzf')
 else
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
 endif
-" }}}4
-" Plug 'yggdroot/leaderf', { 'do': './install.sh' }
+" }}}3
+Plug 'yggdroot/leaderf', { 'do': './install.sh' }
 " Plug 'srstevenson/vim-picker'
-" {{{4 denite
+" {{{3 denite
 " Plug 'Shougo/denite.nvim'
 " Plug 'raghur/fuzzy-denite', { 'do': ':FuzzyDeniteInstall' }
   " call denite#custom#source('_', 'matchers', ['matcher/gofuzzy'])
-" }}}4
+" }}}3
 " Plug 'mattn/vim-fz',
 "       \ { 'do': 'go get github.com/mattn/files ; go get github.com/mattn/gof' }
 " Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 " Plug 'troydm/asyncfinder.vim'
 " }}}3
-" {{{3 NERDTree
+" {{{2 NERDTree
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'AndrewRadev/andrews_nerdtree.vim' " let g:andrews_nerdtree_all = 1
@@ -100,30 +107,26 @@ Plug 'Nopik/vim-nerdtree-direnter'
 Plug 'evandotpro/nerdtree-chmod'
 " Plug 'rargo/vim-line-jump' " https://github.com/rargo/vim-line-jump
 " Plug 'gabenespoli/vim-cider-vinegar' " https://github.com/gabenespoli/vim-cider-vinegar
-" }}}3
+" }}}2
 Plug 'majutsushi/tagbar'
 Plug 'justinmk/vim-gtfo'
 Plug 'tyru/open-browser.vim'
 " }}}2
-" {{{2 Version Control
-" {{{3 Fugitive
+" }}}1
+
+" {{{1 Version Control
+" {{{2 Fugitive
 Plug 'tpope/vim-fugitive'
-      \| Plug 'tpope/vim-rhubarb'
-      \| Plug 'junegunn/gv.vim', { 'on': 'GV' }
-      \| Plug 'gregsexton/gitv', { 'on': 'Gitv' }
-" }}}3
-Plug 'rhysd/committia.vim'
-Plug 'jlfwong/vim-mercenary'
+Plug 'tpope/vim-rhubarb'
+Plug 'junegunn/gv.vim', { 'on': 'GV' }
+Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 Plug 'lambdalisue/gina.vim', { 'on': 'Gina' }
 " }}}2
+Plug 'rhysd/committia.vim'
+Plug 'jlfwong/vim-mercenary'
+" }}}1
 
 " }}}1
-" {{{2 by romainl - Romain Lafourcade
-Plug 'romainl/vim-qf'
-Plug 'romainl/vim-qlist'
-" }}}
-" {{{2 by mhinz - Marco Hinz
-" }}}2
 
 " {{{1 Window display utilities
 Plug 'halostatue/vim-zoom-win'
@@ -145,6 +148,7 @@ Plug 'rhysd/vim-crystal', { 'for': 'crystal' }
 " }}}2
 " {{{2 Elixir
 Plug 'elixir-lang/vim-elixir', { 'for': [ 'elixir', 'eelixir' ] }
+Plug 'mhinz/vim-mix-format', { 'for': [ 'elixir', 'eelixir' ] }
 Plug 'mattreduce/vim-mix', { 'for': [ 'elixir', 'eelixir' ] }
 Plug 'c-brenn/phoenix.vim'
 Plug 'slashmili/alchemist.vim'
@@ -315,6 +319,24 @@ Plug 'godlygeek/csapprox'
 Plug 'dracula/vim'
 Plug 'chrisbra/Colorizer'
 " }}}1
+
+" {{{1 Libraries
+Plug 'junegunn/vim-emoji'
+Plug 'junegunn/vim-ruby-x', { 'on': 'RubyX' }
+Plug 'mattn/webapi-vim'
+Plug 'tpope/vim-haystack'
+Plug 'tpope/vim-scriptease'
+Plug 'tomtom/tlib_vim'
+Plug 'tweekmonster/exception.vim'
+Plug 'mhinz/vim-lookup'
+Plug 'tweekmonster/helpful.vim'
+Plug 'thinca/vim-openbuf'
+Plug 'kana/vim-submode'
+" }}}
+
+" {{{1 Development utilities
+Plug 'vim-jp/vital.vim', { 'on': [ 'Vitalize' ] }
+" }}}
 
 delfunction Cond
 

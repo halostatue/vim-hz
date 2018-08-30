@@ -62,7 +62,6 @@ let g:zsh_fold_enable = 1
 let g:markdown_fenced_languages =
       \ [
       \   'css',
-      \   'elixir',
       \   'erb=eruby',
       \   'javascript',
       \   'js=javascript',
