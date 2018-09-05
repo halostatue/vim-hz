@@ -66,3 +66,18 @@ endif
 if homebrew#binary('git')
   let g:fugitive_git_executable = homebrew#binary('git')
 endif
+
+if homebrew#active() && homebrew#isdirectory('opt/python/Frameworks/Python.framework')
+  let s:match = glob(
+        \ homebrew#path('opt/python/Frameworks/Python.framework/Versions') . '/*/Python',
+        \ v:true,
+        \ v:true)
+  for s:dll in s:match
+    let &pythonthreedll = s:dll
+    break
+  endfor
+
+  set pyxversion=3
+  let g:UltiSnipsUsePythonVersion = 3
+  py3 import sys
+endif

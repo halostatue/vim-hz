@@ -35,7 +35,7 @@ endfunction
 " @usage [onoff]
 " Toggle the mapping of [jk] <--> g[jk]. Accepts [onoff] to chose a specific
 " state (0 or v:false is off).
-function! hz#toggle#gjk_mapping(...)
+function! hz#toggle#gjk_mapping(...) abort
   if a:0
     let l:use = !!a:1
   else

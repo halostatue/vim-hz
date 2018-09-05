@@ -11,7 +11,6 @@ function! hz#ui#tabline() abort
     let l:bufnrs = tabpagebuflist(l:i)
     let l:bufnr = l:bufnrs[tabpagewinnr(l:i) - 1]
 
-    let l:no = l:i
     let l:mod = getbufvar(l:bufnr, '&modified') ? '!' : ''
 
     let l:title =
@@ -144,15 +143,17 @@ function! hz#ui#set_guifont(...) abort
 
   if type(l:list) != v:t_list | let l:list = [ l:list ] | endif
 
+  " vint: -ProhibitUnusedVariable
   let l:size = get(g:, 'hzvim_guifont_size', 10)
-  let l:list = map(l:list, { _, v -> s:ensure_font_size(v, l:size) })
-  let l:list = s:guifont_join(l:list)
+  let l:list = map(l:list, { _, v -> hz#ui#_ensure_font_size(v, l:size) })
+  let l:list = hz#ui#_guifont_join(l:list)
   let &guifont = l:list
+  " vint: +ProhibitUnusedVariable
 
   return l:list
 endfunction
 
-function! s:ensure_font_size(item, size)
+function! hz#ui#_ensure_font_size(item, size) abort
   if type(a:item) == v:t_string
     return [ a:item, a:size ]
   elseif type(a:item) == v:t_list
@@ -170,10 +171,134 @@ function! s:ensure_font_size(item, size)
   endif
 endfunction
 
-function! s:guifont_join(list)
+function! hz#ui#_guifont_join(list) abort
   if hz#is#mac() || hz#is#windows()
     return join(map(a:list, { _, v -> join(v, ':h') }), ',')
   else
     return join(map(a:list, { _, v -> join(v, ' ') }), ',')
   endif
+endfunction
+
+function! hz#ui#_xterm_paste_begin(...)abort
+  set paste
+  return a:0 ? a:1 : ''
+endfunction
+
+function! hz#ui#_pulse_cursor_line(times, delay, ...) abort
+  let l:cl = &l:cursorline
+  let l:index = 0
+  let l:delay = 'sleep' . a:delay . 'm'
+  let l:last = a:0 ? 'sleep' . a:1 . 'm' : l:delay
+
+  while l:index < a:times
+    setlocal cursorline!
+    redraw
+
+    let l:index = l:index + 1
+
+    if l:index < a:times
+      exec l:delay
+    else
+      exec l:last
+    endif
+  endwhile
+
+  let &l:cursorline = l:cl
+endfunction
+
+function! hz#ui#_v_set_search() abort
+  let l:temp = @@
+  normal! gvy
+  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+  let @@ = l:temp
+endfunction
+
+function! hz#ui#_toggle_diff_iwhite() abort
+  if &diffopt =~? 'iwhite'
+    set diffopt -= iwhite
+  else
+    set diffopt += iwhite
+  endif
+  diffupdate
+endfunction
+
+function! hz#ui#_cmdwin_init() abort
+  nnoremap <buffer><silent> q :<C-u>quit<Return>
+  nnoremap <buffer><silent> <Tab> :<c-u>quit<Return>
+
+  call cursor(line('$'), 0)
+
+  startinsert!
+endfunction
+
+function! hz#ui#_is_stdin() abort
+  let s:std_in = 1
+endfunction
+
+function! hz#ui#_startup() abort
+  if exists('s:std_in')
+    unlet s:std_in
+    return
+  endif
+
+  if argc() != 0 && !isdirectory(argv()[0])
+    return
+  endif
+
+  if exists(':Startify')
+    Startify
+  endif
+
+  if exists(':NERDTree')
+    if argc() != 0 && isdirectory(argv()[0])
+      execute 'NERDtree' argv()[0]
+    else
+      NERDTree
+    endif
+    wincmd w
+  endif
+endfunction
+
+if !islocked('s:toggle_window_commands')
+  let s:toggle_window_commands =
+        \ {
+        \   'quickfix': { 'close': 'cclose', 'open': 'copen' },
+        \   'location': { 'close': 'lclose', 'open': 'lopen' }
+        \ }
+  lockvar s:toggle_window_commands
+endif
+
+function! hz#ui#toggle_window(type) abort
+  let l:w = winnr('$')
+  execute s:toggle_window_commands[a:type].close
+  if l:w == winnr('$')
+    execute s:toggle_window_commands[a:type].open
+    setlocal nowrap whichwrap=b,s
+  endif
+endfunction
+
+function! hz#ui#_execute_in_shell(command) abort
+  let l:cmd = join(map(split(a:command), 'expand(v:val)'))
+  let l:winnr = bufwinnr(printf('^%s$', l:cmd))
+
+  if l:winnr < 0
+    silent! execute printf('botright vnew %s', fnameescape(l:cmd))
+  else
+    silent! execute printf('%dwincmd w', l:winnr)
+  endif
+
+  setlocal buftype=nowrite bufhidden=wipe
+        \ nobuflisted noswapfile nowrap nonumber
+
+  silent! execute 'silent %!'. l:cmd
+  silent! redraw
+  silent! execute
+        \ 'autocmd BufUnload <buffer> bufwinnr(' . bufnr('#') .
+        \ ') . ''wincmd w'''
+  silent! execute
+        \ 'nnoremap <silent> <buffer> <LocalLeader>r ' .
+        \ ':call <SID>execute_in_shell(' . l:cmd ')<CR>' .
+        \ exists(':CleanAnsiColors') ? ':CleanAnsiColors<CR>' : ''
+  silent! execute 'nnoremap <silent> <buffer> q :quit<CR>'
+  if exists(':CleanAnsiColors') | silent! execute 'CleanAnsiColors' | endif
 endfunction

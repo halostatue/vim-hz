@@ -76,29 +76,11 @@ if $GOROOT !=# '' && isdirectory(expand('$GOROOT/misc/vim'))
   set runtimepath+=$GOROOT/misc/vim
 endif
 
-function! s:vimscript_user_commands()
-  redir => l:commands
-  silent! command
-  redir END
-
-  let l:commands =
-        \ join(
-        \   map(
-        \     split(l:commands, '\n')[1:],
-        \     { _, v -> matchstr(v, '[!"b]*\s\+\zs\u\w*\ze') }))
-
-  if empty(l:commands)
-    return
-  else
-    execute 'syntax keyword vimCommand' l:commands
-  endif
-endfunction
-
 augroup hzvim_autocmd_vimscript_syntax
   autocmd!
 
   " Add syntax highlighting for user-defined commands.
-  autocmd Syntax vim call s:vimscript_user_commands()
+  autocmd Syntax vim call hz#_vimscript_user_commands()
   " Set folding to syntax
   autocmd FileType vim setlocal foldmethod=syntax
 
@@ -121,26 +103,22 @@ augroup hzvim_autocmd_vimscript_syntax
   endif
 augroup END
 
-function! s:omni(fn)
-  if exists(printf('*%s', a:fn)) | let &l:omnifunc=a:fn | endif
-endfunction
-
 augroup hzvim_autocmd_filetype_omnicompletes
   autocmd!
-  autocmd FileType ada call s:omni('adacomplete#Complete')
-  autocmd FileType c,cpp,objc,obcpp call s:omni('ccomplete#Complete')
-  autocmd FileType css call s:omni('csscomplete#CompleteCSS')
-  autocmd FileType html,markdown call s:omni('htmlcomplete#CompleteTags')
-  autocmd FileType java call s:omni('javacomplete#Complete')
-  autocmd FileType php call s:omni('phpcomplete#CompletePHP')
+  autocmd FileType ada call hz#_omni('adacomplete#Complete')
+  autocmd FileType c,cpp,objc,obcpp call hz#_omni('ccomplete#Complete')
+  autocmd FileType css call hz#_omni('csscomplete#CompleteCSS')
+  autocmd FileType html,markdown call hz#_omni('htmlcomplete#CompleteTags')
+  autocmd FileType java call hz#_omni('javacomplete#Complete')
+  autocmd FileType php call hz#_omni('phpcomplete#CompletePHP')
   if has('python3')
-    autocmd FileType python call s:omni('python3complete#Complete')
+    autocmd FileType python call hz#_omni('python3complete#Complete')
   else
-    autocmd FileType python call s:omni('pythoncomplete#Complete')
+    autocmd FileType python call hz#_omni('pythoncomplete#Complete')
   endif
-  autocmd FileType ruby call s:omni('rubycomplete#Complete')
-  autocmd FileType sql call s:omni('sqlcomplete#Complete')
-  autocmd FileType xml call s:omni('xmlcomplete#CompleteTags')
+  autocmd FileType ruby call hz#_omni('rubycomplete#Complete')
+  autocmd FileType sql call hz#_omni('sqlcomplete#Complete')
+  autocmd FileType xml call hz#_omni('xmlcomplete#CompleteTags')
 augroup END
 
 augroup hzvim_autocmd_html_syntax

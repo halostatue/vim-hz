@@ -16,7 +16,9 @@ lockvar g:hz_vim_vim_version
 if 0 | finish | endif
 
 " Use vim settings. First because it changes other options as a side-effect.
+" vint: -ProhibitSetNoCompatible
 if has('vim_starting') | set nocompatible | endif
+" vint: +ProhibitSetNoCompatible
 
 " New to Vim 8, a defaults similar to Tim Pope's sensible. Use it before
 " anything else.

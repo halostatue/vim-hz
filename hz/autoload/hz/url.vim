@@ -9,7 +9,7 @@ scriptencoding utf-8
 function! hz#url#encode(url) abort
   let l:parts = split(a:url, '/', v:true)
   let l:index = l:parts[0] =~# '^https\=' ? 3 : 1
-  let l:pars[l:index : ] =
+  let l:parts[l:index : ] =
         \ map(
         \   l:parts[l:index :],
         \   { _i, part ->

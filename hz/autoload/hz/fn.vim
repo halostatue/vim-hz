@@ -75,7 +75,7 @@ endfunction
 " (`[item, copy]` or `[[item, ...], copy]`) so that the immutability of the
 " list or dictionary is maintained.
 function! hz#fn#remove(collection, index, ...) abort
-  let l:collection == deepcopy(a:collection)
+  let l:collection = deepcopy(a:collection)
   if type(l:collection) == t:v_dict || !a:0
     return [deepcopy(remove(l:collection, a:index)), l:collection]
   else
@@ -93,7 +93,7 @@ endfunction
 " @usage {list} [func] [dict]
 " Return a sorted copy of {list}. See |sort()|.
 function! hz#fn#sort(list, ...) abort
-  let l:list = deepcopy(list)
+  let l:list = deepcopy(a:list)
   if a:0 > 1
     return sort(l:list, a:1, a:2)
   elseif a:0
@@ -108,7 +108,7 @@ endfunction
 " Return a copy of a list with second and succeeding copies of repeated
 " adjacent list items in-place. See |uniq()|.
 function! hz#fn#uniq(list, ...) abort
-  let l:list = deepcopy(list)
+  let l:list = deepcopy(a:list)
   if a:0 > 1
     return uniq(l:list, a:1, a:2)
   elseif a:0
@@ -241,9 +241,9 @@ function! hz#fn#reduce(expr, initial, ...) abort
     endif
   endif
 
-  let l:Fn = s:fnref(l:Fn)
+  let l:Fn = hz#fn#_ref(l:Fn)
   if type(l:Fn) != v:t_func
-    throw "hz#fn#reduce requires a function name or reference."
+    throw 'hz#fn#reduce requires a function name or reference.'
   endif
 
   if type(l:expr) == v:t_dict
@@ -264,7 +264,7 @@ endfunction
 " slower than if it is a function name or a function reference.
 function! hz#fn#any(expr, Fn) abort
   let l:expr = deepcopy(a:expr)
-  let l:Fn = s:fnref(a:Fn)
+  let l:Fn = hz#fn#_ref(a:Fn)
 
   if type(l:Fn) == v:t_func
     if type(l:expr) == v:t_dict
@@ -303,10 +303,10 @@ endfunction
 " slower than if it is a function name or a function reference.
 function! hz#fn#all(expr, Fn) abort
   let l:expr = deepcopy(a:expr)
-  let l:Fn = s:fnref(a:Fn)
+  let l:Fn = hz#fn#_ref(a:Fn)
 
   if type(l:Fn) == v:t_func
-    if type(a:expr) == v:t_dict
+    if type(l:expr) == v:t_dict
       let l:Fn = { k, v -> !l:Fn(k, v) }
     else
       let l:Fn = { v -> !l:Fn(v) }
@@ -315,10 +315,10 @@ function! hz#fn#all(expr, Fn) abort
     let l:Fn = printf('!(%s)', l:Fn)
   endif
 
-  return !hz#fn#any(a:expr, l:Fn)
+  return !hz#fn#any(l:expr, l:Fn)
 endfunction
 
-function! s:fnref(Fn)
+function! hz#fn#_ref(Fn) abort
   if type(a:Fn) == v:t_string && a:Fn =~# '^\I\i+$' && exists('*' . a:Fn)
     return function(a:Fn)
   else

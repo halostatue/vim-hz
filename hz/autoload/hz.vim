@@ -155,7 +155,7 @@ endfunction
 function! hz#trim_trailing(string, ...) abort
   let l:pattern = '\_s\+$'
   if a:0 == 1 | let l:pattern = a:1 . '\+$' | endif
-  return substitute(a:s, printf('%s\+$', a:0 ? a:1 : '\_s'), '', '')
+  return substitute(a:string, printf('%s\+$', l:pattern), '', '')
 endfunction
 
 ""
@@ -188,7 +188,7 @@ endfunction
 ""
 " Clean trailing whitespace from the range.
 function! hz#clean_whitespace() abort range
-  call hz#with_saved_search(a:firstline . ',' a:lastline . 's/\s\+$//e')
+  call hz#with_saved_search(a:firstline . ',' . a:lastline . 's/\s\+$//e')
 endfunction
 
 ""
@@ -240,4 +240,44 @@ endfunction
 function! hz#switch_window(bufname) abort
   let l:nr = bufwinnr(a:bufname)
   if l:nr >= 0 | execute l:nr . 'wincmd w' | endif
+endfunction
+
+function! hz#on_battery() abort
+  if hz#is#windows() || hz#is#cygwin()
+    return v:false
+  elseif hz#is#mac()
+    return system('pmset -g batt') =~? '''Battery Power'''
+  elseif filereadable('/sys/class/power_supply/AC/online')
+    return readfile('/sys/class/power_supply/AC/online') == ['0']
+  else
+    return v:false
+  endif
+endfunction
+
+function! hz#_vimscript_user_commands() abort
+  redir => l:commands
+  silent! command
+  redir END
+
+  let l:commands =
+        \ join(
+        \   map(
+        \     split(l:commands, '\n')[1:],
+        \     { _, v -> matchstr(v, '[!"b]*\s\+\zs\u\w*\ze') }))
+
+  if empty(l:commands)
+    return
+  else
+    execute 'syntax keyword vimCommand' l:commands
+  endif
+endfunction
+
+function! hz#_omni(fn) abort
+  if exists(printf('*%s', a:fn)) | let &l:omnifunc=a:fn | endif
+endfunction
+
+function! hz#_synstack() abort
+  echo join(map(
+        \ synstack(line('.'), col('.')), 'synIDattr(v:val, ''name'')'),
+        \ ' > ')
 endfunction

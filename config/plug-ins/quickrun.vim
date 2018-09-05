@@ -4,17 +4,9 @@ if hz#is#plugged('vim-quickrun')
   if !has_key(g:, 'quickrun_config') | let g:quickrun_config = {} | endif
 
   if hz#is#plugged('vim-qrpsqlpq')
-    function! s:init_qrpsqlpq()
-      nmap <buffer> <Leader>r [qrpsqlpq]
-      nnoremap <silent> <buffer> [qrpsqlpq]j :call qrpsqlpq#run('split')<CR>
-      nnoremap <silent> <buffer> [qrpsqlpq]l :call qrpsqlpq#run('vsplit')<CR>
-      nnoremap <silent> <buffer> [qrpsqlpq]r :call qrpsqlpq#run()<CR>
-    endfunction
-
     augroup quickrun-qrpsqlpq
       autocmd!
-
-      autocmd FileType sql call s:init_qrpsqlpq()
+      autocmd FileType sql call hz#plugins#_init_quickrun_psqlpq()
     augroup END
   endif
 

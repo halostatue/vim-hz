@@ -15,13 +15,13 @@ else
   let s:vim_cache = expand('~/.cache')
 endif
 
-function! s:mkcachepath(...)
+function! hz#cache#_mkcachepath(...) abort
   let l:path = join(hz#fn#flatten(s:vim_cache, a:000), '/')
   if !isdirectory(l:path) | call mkdir(l:path, 'p') | endif
   return l:path
 endfunction
 
-call s:mkcachepath()
+call hz#cache#_mkcachepath()
 
 ""
 " Return the cache root path.
@@ -32,5 +32,5 @@ endfunction
 ""
 " Create and return a named cache for the given {path...}.
 function! hz#cache#for(path, ...) abort
-  return s:mkcachepath([a:path, a:000])
+  return hz#cache#_mkcachepath([a:path, a:000])
 endfunction

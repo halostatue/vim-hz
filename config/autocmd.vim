@@ -55,18 +55,9 @@ augroup END
 
 " Set q/<Tab> to quit the command window, move the first character, and start
 " in insert mode.
-function! s:cmdwin_init()
-  nnoremap <buffer><silent> q :<C-u>quit<Return>
-  nnoremap <buffer><silent> <Tab> :<c-u>quit<Return>
-
-  call cursor(line('$'), 0)
-
-  startinsert!
-endfunction
-
 augroup hzvim_autocmd_cmdwin
   autocmd!
-  autocmd CmdwinEnter * call s:cmdwin_init()
+  autocmd CmdwinEnter * call hz#ui#_cmdwin_init()
 augroup END
 
 augroup hzvim_autocmd_silence_gui_beep
@@ -74,33 +65,10 @@ augroup hzvim_autocmd_silence_gui_beep
   autocmd GUIEnter * set noerrorbells visualbell t_vb=
 augroup END
 
-function! s:startup()
-  if exists('s:std_in')
-    unlet s:std_in
-    return
-  endif
-
-  if argc() != 0 && !isdirectory(argv()[0])
-    return
-  endif
-
-  if exists(':Startify')
-    Startify
-  endif
-
-  if exists(':NERDTree')
-    if argc() != 0 && isdirectory(argv()[0])
-      execute 'NERDtree' argv()[0]
-    else
-      NERDTree
-    endif
-    wincmd w
-  endif
-endfunction
 
 " If Startify and NERDTree exist, start them.
 augroup hzvim_autocmd_startup
   autocmd!
-  autocmd StdinReadPre * let s:stdin = 1
-  autocmd VimEnter * call s:startup()
+  autocmd StdinReadPre * call hz#ui#_is_stdin()
+  autocmd VimEnter * call hz#ui#_startup()
 augroup END

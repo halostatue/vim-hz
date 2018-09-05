@@ -28,11 +28,11 @@ nnoremap g, g,zz
 
 " Keep search matches in the middle of the window and pulse the line when
 " moving to them.
-nnoremap <silent> n nzzzv:call <SID>PulseCursorLine(4, 20, 5)<CR>
-nnoremap <silent> N Nzzzv:call <SID>PulseCursorLine(4, 20, 5)<CR>
+nnoremap <silent> n nzzzv:call hz#ui#_pulse_cursor_line(4, 20, 5)<CR>
+nnoremap <silent> N Nzzzv:call hz#ui#_pulse_cursor_line(4, 20, 5)<CR>
 augroup hsautocmd-pulse
   autocmd!
-  autocmd FocusGained * call s:PulseCursorLine(4, 20, 5)
+  autocmd FocusGained * call hz#ui#_pulse_cursor_line(4, 20, 5)
 augroup END
 
 " Make CTRL-^ rebound to the line and column in the alternate file.
@@ -42,8 +42,8 @@ noremap <C-^> <C-^>`"
 noremap <C-G> 2<C-G>
 
 " Use the visual mode selection to set the search for */# searches.
-xnoremap <silent> * :<C-U>call <SID>VSetSearch()<CR>//<CR><C-O>
-xnoremap <silent> # :<C-U>call <SID>VSetSearch()<CR>??<CR><C-O>
+xnoremap <silent> * :<C-U>call hz#ui#_v_set_search()<CR>//<CR><C-O>
+xnoremap <silent> # :<C-U>call hz#ui#_v_set_search()<CR>??<CR><C-O>
 
 " Don't move on */#
 nnoremap * *<C-O>
@@ -103,7 +103,7 @@ nnoremap <silent> [Space]cd :<C-u>CDToBufferDir<CR>
 
 " {{{ [Space]d… :
 " Toggle the diff options to include or exclude whitespace
-nnoremap <silent> [Space]dw :<C-u>call <SID>toggle_diff_iwhite()<CR>
+nnoremap <silent> [Space]dw :<C-u>call hz#ui#_toggle_diff_iwhite<CR>
 
 " {{{2 [Space]f… :
 " Jump folds.
@@ -147,44 +147,5 @@ nnoremap <silent> [Quickfix]q :<C-U>ToggleQuickfixWindow<CR>
 nnoremap <silent> [Quickfix]n :<C-U>cnext<CR>
 " [Quickfix]p - previous quickfix item
 nnoremap <silent> [Quickfix]p :<C-U>cprevious<CR>
-
-" Functions for the maps within.
-function! s:PulseCursorLine(times, delay, ...)
-  let l:cl = &l:cursorline
-  let l:index = 0
-  let l:delay = 'sleep' . a:delay . 'm'
-  let l:last = a:0 ? 'sleep' . a:1 . 'm' : l:delay
-
-  while l:index < a:times
-    setlocal cursorline!
-    redraw
-
-    let l:index = l:index + 1
-
-    if l:index < a:times
-      exec l:delay
-    else
-      exec l:last
-    endif
-  endwhile
-
-  let &l:cursorline = l:cl
-endfunction
-
-function! s:VSetSearch()
-  let l:temp = @@
-  normal! gvy
-  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  let @@ = l:temp
-endfunction
-
-function! s:toggle_diff_iwhite()
-  if &diffopt =~? 'iwhite'
-    set diffopt -= iwhite
-  else
-    set diffopt += iwhite
-  endif
-  diffupdate
-endfunction
 
 " vim:set foldmethod=marker

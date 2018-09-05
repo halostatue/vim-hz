@@ -61,8 +61,8 @@ endfunction
 function! hz#bufferize#bufnr(command) abort
   let l:name = 'Bufferize: ' . a:command
   for l:bufnr in tabpagebuflist()
-    if bufname(l:bufnr) =~? l:name 
-      return l:bufnr 
+    if bufname(l:bufnr) =~? l:name
+      return l:bufnr
     endif
   endfor
 
@@ -75,20 +75,20 @@ function! hz#bufferize#bufnr(command) abort
   return -1 * l:bufnr
 endfunction
 
-function! s:update_messages_buffer(...) abort
+function! hz#bufferize#_update_messages_buffer(...) abort
   silent call hz#bufferize#do('messages')
 endfunction
 
 ""
-" Bufferizes the messages command with an update callback. If messages are
+" Bufferizes the `messages` command with an update callback. If messages are
 " already bufferized, does nothing.
 function! hz#bufferize#messages() abort
   if hz#bufferize#bufnr('messages')
     return
   endif
 
-  call s:update_messages_buffer()
+  call hz#bufferize#_update_messages_buffer()
 
   call hz#buffer#timer(hz#bufferize#bufnr('messages'),
-        \ function('s:update_messages_buffer'), 500)
+        \ function('hz#bufferize_update_messages_buffer'), 500)
 endfunction

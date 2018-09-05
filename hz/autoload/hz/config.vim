@@ -7,7 +7,7 @@ if exists('s:loaded') | finish | endif
 
 let s:loaded = {}
 
-function! s:loaded(from, ...)
+function! hz#config#_loaded(from, ...) abort
   let l:found = v:false
   for l:pattern in hz#fn#flatten(a:000)
     for l:vim in globpath(a:from, l:pattern, 0, 1)
@@ -86,7 +86,7 @@ endfunction
 " Multiple patterns may be provided either as multiple arguments or one or
 " more lists of patterns.
 function! hz#config#runtime(pattern, ...) abort
-  return s:loaded(&runtimepath, hz#fn#flatten(a:pattern, a:000))
+  return hz#config#_loaded(&runtimepath, hz#fn#flatten(a:pattern, a:000))
 endfunction
 
 ""

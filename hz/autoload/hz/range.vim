@@ -14,7 +14,7 @@ scriptencoding utf-8
 "     vmap u :call hz#range#uniq()<CR>
 function! hz#range#uniq() range abort
   let l:seen = {}
-  let l:uniq = [
+  let l:uniq = []
 
   for l:line in getline(a:firstline, a:lastline)
     let l:normalized = '>' . l:line

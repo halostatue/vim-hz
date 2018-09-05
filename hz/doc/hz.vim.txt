@@ -149,7 +149,7 @@ hz#bufferize#bufnr({command})                           *hz#bufferize#bufnr()*
   Return a negative buffer number if the buffer is not visible.
 
 hz#bufferize#messages()                              *hz#bufferize#messages()*
-  Bufferizes the messages command with an update callback. If messages are
+  Bufferizes the `messages` command with an update callback. If messages are
   already bufferized, does nothing.
 
 hz#cache#root()                                              *hz#cache#root()*
@@ -365,8 +365,11 @@ hz#is#cygwin()                                                *hz#is#cygwin()*
 hz#is#sudo()                                                    *hz#is#sudo()*
   Returns v:true if the platform is running under `sudo`.
 
-hz#is#plugged({plug}, {plugs})                               *hz#is#plugged()*
-  Returns v:true if {plug} (or [plugs...]) has been added to the vim-plug
+hz#is#tmux()                                                    *hz#is#tmux()*
+  Returns v:true if vim is running under tmux
+
+hz#is#plugged({plug...})                                     *hz#is#plugged()*
+  Returns v:true if any {plug...} has been added to the vim-plug
   configuration.
 
   This is used to provide conditional configuration options, such as disabling
@@ -445,8 +448,14 @@ hz#ui#status#filemodifiers()                    *hz#ui#status#filemodifiers()*
 hz#ui#status#scm()                                        *hz#ui#status#scm()*
   Returns the SCM status (currently only supports fugitive).
 
+hz#ui#status#conflicted()                          *hz#ui#status#conflicted()*
+  Returns the conflicted status.
+
 hz#ui#status#search()                                  *hz#ui#status#search()*
   Returns search count information (currently only supports anzu).
+
+hz#ui#status#capslock()                              *hz#ui#status#capslock()*
+  Returns CapsLockStatusline.
 
 hz#ui#status#asyncrun()                              *hz#ui#status#asyncrun()*
   Returns the current asynchronous run status.

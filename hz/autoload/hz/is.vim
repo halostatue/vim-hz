@@ -49,6 +49,12 @@ function! hz#is#sudo() abort
 endfunction
 
 ""
+" Returns v:true if vim is running under tmux
+function! hz#is#tmux() abort
+  return exists('$TMUX')
+endfunction
+
+""
 " @usage {plug...}
 " Returns v:true if any {plug...} has been added to the vim-plug configuration.
 "
@@ -65,12 +71,12 @@ endfunction
 "     endif
 function! hz#is#plugged(plug, ...) abort
   let l:plugs = get(g:, 'plugs', [])
-  if empty(l:plugs) | return false | endif
+  if empty(l:plugs) | return v:false | endif
   return hz#fn#any(hz#fn#flatten(a:plug, a:000), { v -> has_key(l:plugs, v) })
 endfunction
 
 function! hz#is#all_plugged(plug, ...) abort
   let l:plugs = get(g:, 'plugs', [])
-  if empty(l:plugs) | return false | endif
+  if empty(l:plugs) | return v:false | endif
   return hz#fn#all(hz#fn#flatten(a:plug, a:000), { v -> has_key(l:plugs, v) })
 endfunction

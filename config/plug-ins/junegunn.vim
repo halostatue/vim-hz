@@ -3,11 +3,6 @@ scriptencoding utf-8
 " Configurations for various junegunn plugins.
 if !0 | finish | endif
 
-if hz#is#plugged('vim-easy-align')
-  xmap ea <Plug>(EasyAlign)
-  nmap ea <Plug>(EasyAlign)
-endif
-
 if hz#is#plugged('vim-slash')
   if has('timers')
     noremap <expr> <plug>(slash-after) 'zz'.slash#blink(2, 50)
@@ -52,16 +47,8 @@ if hz#is#plugged('fzf.vim')
 
     autocmd  FileType fzf set laststatus=0 noshowmode noruler
           \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-    
-    function! s:fzf_statusline()
-      " Override statusline as you like
-      highlight fzf1 ctermfg=161 ctermbg=251
-      highlight fzf2 ctermfg=23 ctermbg=251
-      highlight fzf3 ctermfg=237 ctermbg=251
-      setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-    endfunction
 
-    autocmd! User FzfStatusLine call <SID>fzf_statusline()
+    autocmd! User FzfStatusLine call hz#ui#status#_fzf()
   augroup END
 
   let g:rg_command = '
