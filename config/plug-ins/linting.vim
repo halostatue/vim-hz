@@ -1,7 +1,10 @@
 scriptencoding utf-8
 
 if hz#is#plugged('neomake')
-  " Run neomake automatically.
+  if hz#plugins#has('neomake_maybe_use_bundler')
+    call neomake#config#set('ft.ruby.InitForJob',
+          \ function('hz#plugins#_neomake_maybe_use_bundler'))
+  endif
 
   if hz#on_battery()
     call neomake#configure#automake('w')
@@ -245,13 +248,13 @@ if hz#is#plugged('vim-lsp')
             \ })
     endif
 
-    if executable('elixir-ls')
-      autocmd User lsp_setup call lsp#register_server({
-            \   'name': 'elixir-ls',
-            \   'cmd': {server_info->[&shell, &shellcmdflag, 'elixir-ls']},
-            \   'whitelist': ['elixir', 'eelixir'],
-            \ })
-    endif
+    " if executable('elixir-ls')
+    "   autocmd User lsp_setup call lsp#register_server({
+    "         \   'name': 'elixir-ls',
+    "         \   'cmd': {server_info->[&shell, &shellcmdflag, 'elixir-ls']},
+    "         \   'whitelist': ['elixir', 'eelixir'],
+    "         \ })
+    " endif
   augroup END
 
   " let g:lsp_signs_enabled = 1

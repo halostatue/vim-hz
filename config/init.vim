@@ -14,7 +14,7 @@ let g:loaded_2html_plugin = 1 " Disable the TOhtml command.
 let g:loaded_getscriptPlugin = 1 " Disable GetLatestVimScripts
 let g:loaded_logiPat = 1 " Disable LogiPat
 let g:loaded_matchparen = 1 " Disable default matchparen
-let g:loaded_netrwPlugin = 1 " Disable netrw and prefer NERD-tree.
+" let g:loaded_netrwPlugin = 1 " Disable netrw and prefer NERD-tree.
 let g:loaded_vimballPlugin = 1 " Disable vimballs.
 
 " Automatically install vim-plug, install plugs if the plug list changed.

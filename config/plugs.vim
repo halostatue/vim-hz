@@ -22,6 +22,7 @@ endfunction
 " {{{1 Generally useful utilities
 " {{{2 by tpope - Tim Pope
 Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-apathy'
 Plug 'tpope/tpope-vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-endwise'
@@ -44,7 +45,7 @@ Plug 'junegunn/vim-fnr'
 
 " {{{2 by kana - Kana Natsuno
 Plug 'kana/vim-smartchr'
-Plug 'kana/vim-smartinput' " Plug 'cohama/lexima.vim'
+Plug 'kana/vim-smartinput'
 " }}}2
 
 " {{{2 by lambdalisue
@@ -147,6 +148,7 @@ Plug 'halostatue/vim-zoom-win'
 Plug 'itchyny/vim-cursorword'
 Plug 'mhinz/vim-startify'
 Plug 'myusuf3/numbers.vim'
+" Plug 'tpope/vim-flagship'
 " }}}1
 
 " {{{1 Text objects
@@ -298,8 +300,7 @@ Plug 'vim-erlang/vim-erlang-tags', { 'for': 'erlang' }
 " }}}2
 
 " {{{2 Git, diff, etc.
-Plug 'tpope/vim-git',
-      \ { 'for': [ 'gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git' ] }
+Plug 'tpope/vim-git'
 Plug 'lambdalisue/vim-unified-diff'
 " }}}2
 
@@ -349,10 +350,6 @@ Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'posva/vim-vue', { 'for': [ 'vue', 'javascript.vue' ] }
 Plug 'rhysd/npm-filetypes.vim', { 'for': [ 'npm-debug-log', 'npmrc' ]}
-
-if hz#is#plugged('syntastic')
-  Plug 'pmsorhaindo/syntastic-local-eslint.vim'
-endif
 " }}}2
 
 " {{{2 JSON
@@ -465,9 +462,9 @@ Plug 'jneen/ragel.vim', { 'for': 'ragel' }
 Plug 'vim-ruby/vim-ruby', { 'for': [ 'ruby', 'eruby' ] }
 Plug 'depuracao/vim-rdoc', { 'for': 'ruby' }
 Plug 'sunaku/vim-ruby-minitest', { 'for': 'ruby' }
-Plug 'tpope/vim-bundler', { 'on': 'Bundle' }
-Plug 'tpope/vim-rails', { 'on': 'Rails' }
-Plug 'tpope/vim-rake', { 'on': 'Rake' }
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
 Plug 'michaelbruce/vim-chruby'
 " {{{3 Rspec
 Plug 'sheerun/rspec.vim', { 'for': [ 'rspec', 'ruby.rspec' ] }
@@ -510,6 +507,7 @@ Plug 'godlygeek/tabular'
 " {{{3 Markdown
 " Disabled for issue https://github.com/plasticboy/vim-markdown/issues/323
 " Plug 'plasticboy/vim-markdown'
+" Plug 'tpope/vim-markdown'
 Plug 'rhysd/vim-gfm-syntax', { 'for': 'markdown' }
 " }}}3
 
@@ -734,8 +732,7 @@ Plug 'thinca/vim-qfreplace', { 'on': 'Qfreplace' }
 Plug 'thinca/vim-ref', { 'on': 'Ref' }
 Plug 'tomtom/autolinker_vim', { 'on': 'Autolinkbuffer' }
 Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-heroku', { 'on': 'Hk' }
-Plug 'tpope/vim-tbone', { 'on': [ 'Tmux', 'Tyank', 'Tput', 'Twrite', 'Tattach' ] }
+Plug 'tpope/vim-heroku', { 'on': [ 'Hk', 'Heroku' ] }
 Plug 'vim-utils/vim-man', { 'on': [ 'Man', 'Vman', 'Mangrep' ] }
 
 " {{{2 Mac Commands
@@ -779,6 +776,10 @@ Plug 'thinca/vim-quickmemo'
 
 " {{{1 Editing
 Plug 'tomtom/tcomment_vim'
+" Plug 'tpope/commentary'
+" Plug 'scrooloose/nerdcommenter'
+" Plug 'tyru/caw.vim'
+
 Plug 'terryma/vim-multiple-cursors'
 Plug 'landock/vim-expand-region'
 Plug 'csexton/trailertrash.vim'
@@ -787,7 +788,6 @@ Plug 'csexton/trailertrash.vim'
 " Plug 'mhinz/vim-signify'
 Plug 'tomtom/quickfixsigns_vim'
 " }}}2
-
 " }}}1
 
 " {{{1 Window display utilities
@@ -807,7 +807,7 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 " Plug 'skywind3000/asyncrun.vim'
 " }}}1
 
-" {{{1 Libraries
+" {{{1 VimL Libraries
 Plug 'junegunn/vim-emoji'
 Plug 'junegunn/vim-ruby-x', { 'on': 'RubyX' }
 Plug 'mattn/webapi-vim'
@@ -820,26 +820,25 @@ Plug 'tweekmonster/helpful.vim'
 Plug 'thinca/vim-openbuf'
 Plug 'kana/vim-submode'
 Plug 'prabirshrestha/async.vim'
-" }}}
-
-" {{{1 Development utilities
 Plug 'vim-jp/vital.vim', { 'on': [ 'Vitalize' ] }
-" }}}
+" }}}1
+
+" {{{1 SQL Development utilities
+Plug 'tpope/vim-dadbod', { 'on': [ 'DB' ] }
+" Plug 'vim-scripts/dbext.vim'
+" }}}1
 
 " {{{1 tmux plug-ins
-if hz#is#tmux()
-  " These should be used with Tmux Plugin Manager:
-  "   set -g @plugin 'tmux-plugins/tpm'
-  "   set -g @plugin 'tmux-plugins/tmux-sensible'
-  "   set -g @plugin 'christoomey/vim-tmux-navigator'
-  "   run '~/.tmux/plugins/tpm/tpm'
-  Plug 'tmux-plugins/vim-tmux-focus-events'
-  Plug 'christoomey/vim-tmux-navigator'
-  if hz#is#plugged('asyncomplete.vim')
-    Plug 'wellle/tmux-complete.vim'
-  endif
-endif
-" }}}
+" These should be used with Tmux Plugin Manager:
+"   set -g @plugin 'tmux-plugins/tpm'
+"   set -g @plugin 'tmux-plugins/tmux-sensible'
+"   set -g @plugin 'christoomey/vim-tmux-navigator'
+"   run '~/.tmux/plugins/tpm/tpm'
+Plug 'tmux-plugins/vim-tmux-focus-events', Cond(hz#is#tmux())
+Plug 'christoomey/vim-tmux-navigator', Cond(hz#is#tmux())
+Plug 'wellle/tmux-complete.vim', Cond(hz#is#tmux() && hz#is#plugged('asyncomplete.vim'))
+Plug 'tpope/vim-tbone', Cond(hz#is#tmux())
+" }}}1
 
 delfunction Cond
 

@@ -15,14 +15,14 @@ if &term =~? 'xterm'
   cnoremap <special> <Esc>[201~ <nop>
 
   if get(g:, 'optimized_vertical_split')
-    let &t_ti .= '\e[?6;69h'
-    let &t_te .= '\e7\e[?6;69l\e8'
-    let &t_CV = '\e[%i%p1%d;%p2%ds'
+    let &t_ti .= "\e[?6;69h"
+    let &t_te .= "\e7\e[?6;69l\e8"
+    let &t_CV = "\e[%i%p1%d;%p2%ds"
     let &t_CS = 'y'
   endif
 
-  let &t_SI = '\<Esc>]12;lightgreen\x7'
-  let &t_EI = '\<Esc>]12;white\x7'
+  let &t_SI = "\e]12;lightgreen\x7"
+  let &t_EI = "\e]12;white\x7"
 endif
 
 " Using the mouse on a terminal.
