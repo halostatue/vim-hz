@@ -55,7 +55,6 @@ Plug 'lambdalisue/vim-foldround'
 " {{{2 by Shougo
 Plug 'Shougo/context_filetype.vim'
 Plug 'Shougo/echodoc.vim'
-Plug 'Shougo/echodoc.vim'
 " }}}
 
 " {{{2 by thinca
@@ -66,20 +65,13 @@ Plug 'thinca/vim-localrc'
 Plug 'tomtom/tinykeymap_vim'
 " }}}2
 
-" {{{2 by vim-jp
-Plug 'vim-jp/autofmt'
-" }}}2
-
 " {{{2 by romainl - Romain Lafourcade
 Plug 'romainl/vim-qf'
 Plug 'romainl/vim-qlist'
 " }}}
 
-" {{{2 by mhinz - Marco Hinz
-" }}}2
-
 " {{{2 Other
-Plug 'editorconfig/editorconfig-vim'
+Plug 'sgur/vim-editorconfig'
 Plug 'direnv/direnv.vim'
 Plug 'chrisbra/unicode.vim'
 Plug 'vim-utils/vim-troll-stopper'
@@ -154,6 +146,8 @@ Plug 'myusuf3/numbers.vim'
 " {{{1 Text objects
 Plug 'junegunn/vim-after-object'
 Plug 'vim-utils/vim-all'
+Plug 'vim-utils/vim-line'
+Plug 'vim-utils/vim-space'
 Plug 'wellle/targets.vim'
 Plug 'michaeljsmith/vim-indent-object'
 
@@ -197,6 +191,7 @@ Plug 'dag/vim-fish', { 'for': 'fish' }
 
 " {{{2 Ansible
 Plug 'pearofducks/ansible-vim', { 'for': [ 'ansible', 'ansible_host', 'ansible_template'] }
+Plug 'b4b4r07/vim-ansible-vault'
 " }}}2
 
 " {{{2 AppleScript
@@ -206,20 +201,22 @@ Plug 'vim-scripts/applescript.vim', { 'for': 'applescript' }
 " {{{2 C/C++
 Plug 'octol/vim-cpp-enhanced-highlight', { 'for': [ 'cpp' ] }
 Plug 'vim-jp/vim-cpp', { 'for': [ 'c', 'cpp' ] }
+Plug 'lyuts/vim-rtags', { 'for': [ 'c', 'cpp' ] }
 " {{{3 YACC Output y.output
 Plug 'rhysd/y-output.vim', { 'for': 'y-output' }
 " }}}3
 " }}}2
 
 " {{{2 Clojure
-Plug 'guns/vim-clojure-highlight', { 'for': 'clojure' }
-Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
-" Plug 'kovisoft/paredit', { 'for': 'clojure' }
+Plug 'kovisoft/paredit', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
+Plug 'guns/vim-clojure-highlight', { 'for': 'clojure' }
 Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'guns/vim-sexp', { 'for': [ 'clojure', 'scheme', 'lisp' ] }
 Plug 'guns/vim-slamhound', { 'on': 'Slamhound' }
 Plug 'tpope/vim-classpath', { 'for': [ 'clojure', 'java' ], 'on': [ 'Java' ] }
+Plug 'venantius/vim-cljfmt', { 'on': [ 'Cljfmt', 'CljfmtRange', 'CljfmtRequire' ] }
 " }}}2
 
 " {{{2 Coffeescript
@@ -462,7 +459,7 @@ Plug 'jneen/ragel.vim', { 'for': 'ragel' }
 Plug 'vim-ruby/vim-ruby', { 'for': [ 'ruby', 'eruby' ] }
 Plug 'depuracao/vim-rdoc', { 'for': 'ruby' }
 Plug 'sunaku/vim-ruby-minitest', { 'for': 'ruby' }
-Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-bundler', { 'for': 'ruby' }
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-rake'
 Plug 'michaelbruce/vim-chruby'
@@ -535,8 +532,7 @@ Plug 'vimwiki/vimwiki', { 'for': 'vimwiki' }
 
 " {{{2 Templating languages
 " {{{3 Jinja/Jinja2
-" Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'mitsuhiko/vim-jinja'
+Plug 'Glench/Vim-Jinja2-Syntax'
 " }}}3
 
 " {{{3 JST
@@ -594,8 +590,10 @@ Plug 'lepture/vim-velocity', { 'for': 'velocity' }
 " }}}2
 
 " {{{2 VimL/vimhelp
+Plug 'vim-jp/syntax-vim-ex'
 Plug 'junegunn/vader.vim', { 'for': 'vader', 'on': 'Vader' }
 Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
+Plug 'lambdalisue/vim-backslash'
 
 " {{{3 Folds
 Plug 'thinca/vim-ft-diff_fold', { 'for': 'diff' }
@@ -618,10 +616,11 @@ Plug 'rhysd/vim-wasm', { 'for': 'wast' }
 " }}}2
 " }}}1
 
-" {{{1 Language Syntax checking
+" {{{1 Language Syntax checking and formatting
 " Plug 'w0rp/ale'
 Plug 'neomake/neomake'
 Plug 'prabirshrestha/vim-lsp'
+" plug 'sbdchd/neoformat'
 " Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 " Plug 'maralla/validator.vim'
 " }}}1
@@ -694,10 +693,15 @@ Plug 'ludovicchabant/vim-gutentags'
 " {{{1 Color Schemes
 Plug 'flazz/vim-colorschemes'
 Plug 'godlygeek/csapprox'
-Plug 'morhetz/gruvbox'
 Plug 'dracula/vim'
 Plug 'chrisbra/Colorizer'
 Plug 'yggdroot/duoduo'
+Plug 'yuttie/hydrangea-vim'
+Plug 'tyrannicaltoucan/vim-deep-space'
+Plug 'AlessandroYorba/Despacio'
+Plug 'nightsense/snow'
+Plug 'nightsense/stellarized'
+Plug 'arcticicestudio/nord-vim'
 " }}}1
 
 " {{{1 Motions
@@ -730,7 +734,7 @@ Plug 'thinca/vim-editvar', { 'on': 'Editvar' }
 Plug 'thinca/vim-github', { 'on': 'Github' }
 Plug 'thinca/vim-qfreplace', { 'on': 'Qfreplace' }
 Plug 'thinca/vim-ref', { 'on': 'Ref' }
-Plug 'tomtom/autolinker_vim', { 'on': 'Autolinkbuffer' }
+Plug 'tomtom/autolinker_vim', { 'on': 'Albuffer' }
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-heroku', { 'on': [ 'Hk', 'Heroku' ] }
 Plug 'vim-utils/vim-man', { 'on': [ 'Man', 'Vman', 'Mangrep' ] }
@@ -748,6 +752,12 @@ if hz#is#windows()
   Plug 'thinca/vim-winenv', { 'on': 'WinEnv', '<Plug>(winenv-edit)' }
 endif
 " }}}2
+
+" {{{3 Unix Commands
+if !hz#is#windows()
+  Plug 'lambdalisue/suda.vim'
+endif
+" }}}
 
 " {{{2 QuickRun Plugins
 Plug 'thinca/vim-quickrun', { 'on': [ 'QuickRun', '<Plug>(quickrun)' ] }
@@ -807,7 +817,7 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 " Plug 'skywind3000/asyncrun.vim'
 " }}}1
 
-" {{{1 VimL Libraries
+" {{{1 VimL (VimScript) Libraries
 Plug 'junegunn/vim-emoji'
 Plug 'junegunn/vim-ruby-x', { 'on': 'RubyX' }
 Plug 'mattn/webapi-vim'
@@ -821,6 +831,8 @@ Plug 'thinca/vim-openbuf'
 Plug 'kana/vim-submode'
 Plug 'prabirshrestha/async.vim'
 Plug 'vim-jp/vital.vim', { 'on': [ 'Vitalize' ] }
+Plug 'lambdalisue/vital-Whisky'
+Plug 'vim-jp/autofmt'
 " }}}1
 
 " {{{1 SQL Development utilities
@@ -838,9 +850,13 @@ Plug 'tmux-plugins/vim-tmux-focus-events', Cond(hz#is#tmux())
 Plug 'christoomey/vim-tmux-navigator', Cond(hz#is#tmux())
 Plug 'wellle/tmux-complete.vim', Cond(hz#is#tmux() && hz#is#plugged('asyncomplete.vim'))
 Plug 'tpope/vim-tbone', Cond(hz#is#tmux())
+" Plug 'junegunn/heytmux', Cond(hz#is#tmux())
+" heytmux is like Tmuxinator, teamocil, and tmuxp
 " }}}1
 
 delfunction Cond
+
+" Plug 'mhinz/vim-halo'
 
 call plug#end()
 " vim: foldmethod=marker

@@ -14,3 +14,9 @@ if hz#is#plugged('vim-swap')
   omap a, <Plug>(swap-textobject-a)
   xmap a, <Plug>(swap-textobject-a)
 endif
+
+if hz#is#plugged('indentLine')
+  augroup hz-plug-ins-editing-indentLine
+    autocmd! User indentLine doautocmd indentLine Syntax
+  augroup END
+endif
