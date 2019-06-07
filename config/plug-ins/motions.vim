@@ -1,5 +1,10 @@
 scriptencoding utf-8
 
+if hz#is#plugged('vim-easy-align')
+  xmap ga <Plug>(EasyAlign)
+  nmap ga <Plug>(EasyAlign)
+endif
+
 if hz#is#plugged('vim-sneak')
   let g:sneak#s_next = 1
   " let g:sneak#label = 1

@@ -3,8 +3,11 @@ scriptencoding utf-8
 if hz#is#plugged('neomake')
   if hz#plugins#has('neomake_maybe_use_bundler')
     call neomake#config#set('ft.ruby.InitForJob',
-          \ function('hz#plugins#_neomake_maybe_use_bundler'))
+          \ function('hz#plugins#neomakeInitJobWithBundler'))
+          " \ function('hz#plugins#_neomake_maybe_use_bundler'))
   endif
+  call neomake#config#set('ft.ruby.rubocop.InitForJob',
+        \ function('neomake#makers#ft#ruby#try_bundler'))
 
   if hz#on_battery()
     call neomake#configure#automake('w')

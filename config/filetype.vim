@@ -150,13 +150,3 @@ augroup hzvim_autocmd_go_syntax
 
   autocmd FileType go setlocal ts=2 sts=2 sw=2 noet ai
 augroup END
-
-augroup hzvim_autocmd_git_files
-  autocmd!
-
-  " These should not have buftypes set, so clear them.
-  autocmd FileType gitcommit,gitconfig,gitrebase,gitsendemail
-        \ setlocal buftype=
-
-  autocmd FileType gitrebase nnoremap <buffer> <silent> S :Cycle<CR>
-augroup END

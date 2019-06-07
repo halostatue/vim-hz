@@ -26,7 +26,6 @@ Plug 'tpope/vim-apathy'
 Plug 'tpope/tpope-vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-jdaddy'
 Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
@@ -110,10 +109,10 @@ Plug 'AndrewRadev/andrews_nerdtree.vim'
 Plug 'chuckfairy/nerdtree-reveal'
 Plug 'Nopik/vim-nerdtree-direnter'
 Plug 'evandotpro/nerdtree-chmod'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'rargo/vim-line-jump'
-Plug 'gabenespoli/vim-cider-vinegar'
-Plug 'jeetsukumaran/vim-buffergator'
 " }}}2
+Plug 'jeetsukumaran/vim-buffergator'
 Plug 'majutsushi/tagbar'
 Plug 'justinmk/vim-gtfo'
 Plug 'tyru/open-browser.vim'
@@ -123,6 +122,7 @@ Plug 'tyru/open-browser.vim'
 " {{{1 Version Control
 " {{{2 Git: Fugitive
 Plug 'tpope/vim-fugitive'
+" Plug 'neoclide/vim-easygit'
 Plug 'tpope/vim-rhubarb'
 Plug 'junegunn/gv.vim', { 'on': 'GV' }
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
@@ -140,7 +140,14 @@ Plug 'halostatue/vim-zoom-win'
 Plug 'itchyny/vim-cursorword'
 Plug 'mhinz/vim-startify'
 Plug 'myusuf3/numbers.vim'
+Plug 'chrisbra/Recover.vim'
+
+" {{{2 Status Line Tools
 " Plug 'tpope/vim-flagship'
+" Plug 'liuchengxu/eleline.vim'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+" }}}2
 " }}}1
 
 " {{{1 Text objects
@@ -230,6 +237,7 @@ Plug 'mtscout6/vim-cjsx', { 'for': 'coffee' }
 " " }}}3
 " " {{{3 Nginx
 " Plug 'othree/nginx-contrib-vim', { 'for': 'nginx' }
+Plug 'chr4/nginx.vim'
 " " }}}3
 " " {{{3 Systemd
 " Plug 'kurayama/systemd-vim-syntax', { 'for': 'systemd' }
@@ -330,6 +338,8 @@ Plug 'yaymukund/vim-haxe', { 'for': 'haxe' }
 " {{{2 HTML, CSS, SASS, SCSS, and Less
 Plug 'groenewege/vim-less', { 'for': 'less' }
 Plug 'othree/html5.vim'
+Plug 'othree/csscomplete.vim'
+Plug 'gko/vim-coloresque'
 Plug 'tpope/vim-haml', { 'for': [ 'haml', 'sass', 'scss' ] }
 Plug 'JulesWang/css.vim', { 'for': [ 'css', 'scss', 'html' ] }
 Plug 'hail2u/vim-css3-syntax', { 'for': [ 'css', 'scss', 'html' ] }
@@ -343,15 +353,19 @@ Plug 'andreimaxim/vim-io', { 'for': 'io' }
 
 " {{{2 JavaScript
 Plug 'glanotte/vim-jasmine', { 'for': 'jasmine.javascript' }
-Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' }
+" Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' }
+Plug 'MaxMEllon/vim-jsx-pretty', { 'for': 'javascript.jsx' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'posva/vim-vue', { 'for': [ 'vue', 'javascript.vue' ] }
 Plug 'rhysd/npm-filetypes.vim', { 'for': [ 'npm-debug-log', 'npmrc' ]}
+" Plug 'chemzqm/vim-jsx-improve'
+" - Requires disabling vim-javascript if used.
 " }}}2
 
 " {{{2 JSON
 Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'vito-c/jq.vim', { 'for': 'jq' }
+Plug 'neoclide/jsonc.vim', { 'for': 'jsonc' }
 " }}}2
 
 " {{{2 Julia
@@ -414,6 +428,10 @@ Plug 'rayburgemeestre/phpfolding.vim', { 'for': 'php' }
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 Plug '2072/PHP-Indenting-for-VIm', { 'for': 'php' }
 Plug 'rafi/vim-phpspec', { 'for': 'php' }
+" }}}2
+
+" {{{2 Pony
+Plug 'jakwings/vim-pony'
 " }}}2
 
 " {{{2 Postgres SQL/PgPLSQL
@@ -504,7 +522,7 @@ Plug 'godlygeek/tabular'
 " {{{3 Markdown
 " Disabled for issue https://github.com/plasticboy/vim-markdown/issues/323
 " Plug 'plasticboy/vim-markdown'
-" Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-markdown'
 Plug 'rhysd/vim-gfm-syntax', { 'for': 'markdown' }
 " }}}3
 
@@ -513,8 +531,8 @@ Plug 'jceb/vim-orgmode', { 'for': 'org' }
 " }}}3
 
 " {{{3 Pandoc (including Markdown)
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
+" Plug 'vim-pandoc/vim-pandoc'
+" Plug 'vim-pandoc/vim-pandoc-syntax'
 " }}}3
 
 " {{{3 TaskPaper
@@ -526,7 +544,7 @@ Plug 'timcharper/textile.vim', { 'for': 'textile' }
 " }}}3
 
 " {{{3 Vimwiki
-Plug 'vimwiki/vimwiki', { 'for': 'vimwiki' }
+Plug 'vimwiki/vimwiki'
 " }}}3
 " }}}2
 
@@ -617,12 +635,21 @@ Plug 'rhysd/vim-wasm', { 'for': 'wast' }
 " }}}1
 
 " {{{1 Language Syntax checking and formatting
+" {{{2 Syntax checking
 " Plug 'w0rp/ale'
 Plug 'neomake/neomake'
-Plug 'prabirshrestha/vim-lsp'
-" plug 'sbdchd/neoformat'
-" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 " Plug 'maralla/validator.vim'
+" }}}2
+
+" {{{2 Formatting
+Plug 'sbdchd/neoformat'
+" }}}2
+
+" {{{2 LSP
+Plug 'prabirshrestha/vim-lsp'
+" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+" Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install() } }
+" }}}2
 " }}}1
 
 " {{{1 Completion, Snippets, and Tags
@@ -727,6 +754,7 @@ Plug 'kana/vim-grex', { 'on': [ 'Grey', 'Gred' ] }
 Plug 'lambdalisue/vim-gista', { 'on': 'Gista' }
 Plug 'mattn/gist-vim', { 'on': 'Gist' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+" Plug 'simnalamburt/vim-mundo'
 Plug 'mhinz/vim-grepper', { 'on': [ 'Grepper', '<Plug>(GrepperOperator)' ] }
 Plug 'rhysd/vim-grammarous', { 'on': 'GrammarousCheck' }
 Plug 'rstacruz/vim-xtract', { 'on': 'Xtract' }
@@ -785,10 +813,10 @@ Plug 'thinca/vim-quickmemo'
 " }}}1
 
 " {{{1 Editing
-Plug 'tomtom/tcomment_vim'
-" Plug 'tpope/commentary'
+" Plug 'tomtom/tcomment_vim'
+" Plug 'tpope/vim-commentary'
 " Plug 'scrooloose/nerdcommenter'
-" Plug 'tyru/caw.vim'
+Plug 'tyru/caw.vim'
 
 Plug 'terryma/vim-multiple-cursors'
 Plug 'landock/vim-expand-region'
@@ -801,7 +829,7 @@ Plug 'tomtom/quickfixsigns_vim'
 " }}}1
 
 " {{{1 Window display utilities
-Plug 'thinca/vim-fontzoom', { 'on': [ '<Plug>(fontzoom-larger)', '<Plug>(fontzoom-smaller)' ] }
+Plug 'thinca/vim-fontzoom', { 'on': ['<Plug>(fontzoom-larger)',  '<Plug>(fontzoom-smaller)' ] }
 
 " {{{2 Search
 Plug 'haya14busa/is.vim'
